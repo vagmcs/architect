@@ -1,0 +1,37 @@
+gst-plugins-base
+gst-plugins-base-libs
+gst-plugins-good
+gst-plugins-bad
+gst-plugins-ugly
+gst-libav
+ffmpegthumbnailer
+ffmpegthumbs
+
+arandr
+
+# Notification helper
+dunst
+
+# Wallpaper setter
+nitrogen
+
+# Volume control
+volwheel
+pavucontrol
+
+# Imange viewers
+feh
+viewnior
+
+# PDF viewers
+mupdf
+epdfview
+
+# File managers
+thunar
+nautilus
+xarchiver
+
+system-config-printer
+gtk3-print-backends
+lxappearance
