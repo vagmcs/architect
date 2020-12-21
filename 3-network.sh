@@ -24,45 +24,18 @@ echo
 echo "INSTALLING NETWORK COMPONENTS - https://wiki.archlinux.org/index.php/Network_configuration"
 echo
 
-echo " 1) NetworkManager"
-echo " 2) Systemd"
-read -p "${PROMPT_1}" -r OPTION
-case "${OPTION}" in
-1)
-  package_install networkmanager
-  system_ctl enable NetworkManager.service
-  ;;
-2)
-  # Find ethernet and/or wireless devices
-  WIRED_DEV=$(ip link | grep "ens\|eno\|enp" | awk '{print $2}' | sed 's/://' | sed '1!d')
-  WIRELESS_DEV=$(ip link | grep wl | awk '{print $2}' | sed 's/://' | sed '1!d')
 
-  # Create configuration files for both ethernet and wireless devices
-  if [[ -n "${WIRED_DEV}" ]]; then
-    {
-      "[Match]"
-      "Name=${WIRED_DEV}"
-      "[Network]"
-      "DHCP=yes"
-    } >>/etc/systemd/network/20-wired.network
-  fi
-  if [[ -n "${WIRELESS_DEV}" ]]; then
-    {
-      "[Match]"
-      "Name=${WIRELESS_DEV}"
-      "[Network]"
-      "DHCP=yes"
-    } >>/etc/systemd/network/25-wireless.network
-  fi
+PACKAGES=(
+    dnsmasq                 # Easy to configure DNS forwarder and DHCP server
+    networkmanager          # Network connection manager and user applications
+    networkmanager-openvpn  # Network manager VPN plugin for OpenVPN
+)
 
-  package_install iwd
-  systemctl enable iwd.service
+for PKG in "${PACKAGES[@]}"; do
+    package_install "${PKG}"
+done
 
-  system_ctl enable systemd-resolved.service
-  system_ctl enable systemd-networkd.service
-  ;;
-esac
-
+system_ctl enable NetworkManager.service
 timedatectl set-ntp true
 
 echo
