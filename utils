@@ -1,0 +1,291 @@
+#!/usr/bin/env bash
+#     _             _     _ _            _
+#    / \   _ __ ___| |__ (_) |_ ___  ___| |_
+#   / _ \ | '__/ __| '_ \| | __/ _ \/ __| __|
+#  / ___ \| | | (__| | | | | ||  __/ (__| |_
+# /_/   \_\_|  \___|_| |_|_|\__\___|\___|\__|
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# PKG=""
+SPIN="/-\|"
+Bold=$(tput bold)
+Reset=$(tput sgr0)
+Red=$(tput setaf 1)
+Green=$(tput setaf 2)
+Yellow=$(tput setaf 3)
+Blue=$(tput setaf 4)
+Purple=$(tput setaf 5)
+Cyan=$(tput setaf 6)
+PROMPT_1="Enter your option: "
+PROMPT_2="Enter n° of options (ex: 1 2 3 or 1-3): "
+PROMPT_3="You have to manually enter the following commands, then press ${Bold}${Yellow}ctrl+d${Reset} or type ${Bold}${Yellow}exit${Reset}:"
+#
+# Progress animation
+#
+progress() {
+  SPIN="/-\|"
+  echo -ne "  "
+  while true; do
+    kill -0 "${pid}" &>/dev/null
+    # shellcheck disable=SC2181
+    if [[ $? == 0 ]]; then
+      echo -ne "\b${SPIN:i++%${#SPIN}:1}" # run spinner
+      sleep 0.25
+    else
+      echo -ne "\b\b"
+      wait "${pid}"
+      ret_code=$?
+      if [[ "${ret_code}" == 0 ]] || [[ "${ret_code}" == 255 ]]; then
+        echo -e "[${Bold}${Green}success${Reset}]"
+      else
+        echo -e "[${Bold}${Red}failed${Reset}]"
+      fi
+      break
+    fi
+  done
+}
+#
+# Message types
+#
+info_msg() {
+  echo -e "${Bold}[${Bold}${Cyan}INFO${Reset}${Bold}]:${Reset} ${1}"
+}
+warn_msg() {
+  echo -e "${Bold}[${Bold}${Yellow}WARN${Reset}${Bold}]:${Reset} ${1}"
+}
+danger_msg() {
+  echo -e "${Bold}[${Bold}${Red}DANGER${Reset}${Bold}]:${Reset} ${1}"
+}
+error_msg() {
+  echo -e "${Bold}[${Bold}${Red}ERROR${Reset}${Bold}]:${Reset} ${1}" && exit 1
+}
+#
+# Read input
+#
+read_input_text() {
+  read -p "${1} [y/N]: " -r OPTION
+  echo
+  OPTION=$(echo "${OPTION}" | tr '[:upper:]' '[:lower:]')
+}
+read_input_options() {
+  local line
+  local packages
+  read -p "Enter n° of options (ex: 1 2 3 or 1-3): " -r OPTION
+  array=("${OPTION}")
+  for line in "${array[@]/,/ }"; do
+    if [[ ${line/-/} != "${line}" ]]; then
+      for ((i = ${line%-*}; i <= ${line#*-}; i++)); do
+        packages+=("${i}")
+      done
+    else
+      packages+=("${line}")
+    fi
+  done
+  OPTIONS=("${packages[@]}")
+}
+#
+# Check if a package is installed
+#
+is_package_installed() {
+  # check if a package is already installed
+  for PKG in ${1}; do
+    pacman -Q "${PKG}" &>/dev/null && return 0
+  done
+  return 1
+}
+#
+# Simple package installer
+#
+package_install() {
+  for PKG in ${1}; do
+    # shellcheck disable=SC2155
+    local _pkg_repo=$(pacman -Sp --print-format %r "${PKG}" 2>/dev/null | uniq | sed '1!d')
+    case "${_pkg_repo}" in
+    core)
+      _pkg_repo="${Bold}${Red}${_pkg_repo}${Reset}"
+      ;;
+    extra)
+      _pkg_repo="${Bold}${Yellow}${_pkg_repo}${Reset}"
+      ;;
+    community)
+      _pkg_repo="${Bold}${Green}${_pkg_repo}${Reset}"
+      ;;
+    multilib)
+      _pkg_repo="${Bold}${Cyan}${_pkg_repo}${Reset}"
+      ;;
+    *)
+      if [[ $(su - "builder" -c "yay -Ss ${PKG}" 2>/dev/null | grep aur) != "" ]]; then
+        _pkg_repo="${Bold}${Purple}aur${Reset}"
+      else
+        _pkg_repo="${Bold}${Purple}unknown${Reset}"
+      fi
+      ;;
+    esac
+    if ! is_package_installed "${PKG}"; then
+      echo -ne " Installing (${_pkg_repo}) ${Bold}${PKG}${Reset} "
+      if [[ "${_pkg_repo}" == "${Bold}${Purple}aur${Reset}" ]]; then
+        su - "builder" -c "yay -S --noconfirm ${PKG}" >/dev/null 2>&1 &
+      else
+        pacman -S --noconfirm --needed "${PKG}" >/dev/null 2>&1 &
+      fi
+      pid=$! && progress $pid
+    else
+      echo -e " Installing (${_pkg_repo}) ${Bold}${PKG}${Reset} [${Bold}${Blue}exists${Reset}]"
+    fi
+  done
+}
+#
+# Group package installer
+#
+group_package_install() {
+  for PKG in ${1}; do
+    # shellcheck disable=SC2155
+    local _pkg_repo=$(pacman -Sp --print-format %r "${PKG}" 2>/dev/null | uniq | sed '1!d')
+    case "${_pkg_repo}" in
+    core)
+      _pkg_repo="${Bold}${Red}${_pkg_repo}${Reset}"
+      ;;
+    extra)
+      _pkg_repo="${Bold}${Yellow}${_pkg_repo}${Reset}"
+      ;;
+    community)
+      _pkg_repo="${Bold}${Green}${_pkg_repo}${Reset}"
+      ;;
+    multilib)
+      _pkg_repo="${Bold}${Cyan}${_pkg_repo}${Reset}"
+      ;;
+    *)
+      _pkg_repo="${Bold}${Purple}unknown${Reset}"
+      ;;
+    esac
+    # shellcheck disable=SC2207
+    local packages=($(pacman -S -g "${PKG}" | awk '{print $2}' | tr '\n' ' '))
+    for i in "${!packages[@]}"; do
+      printf "%s) %s" "$i" "${packages[$i]}"
+    done
+    echo ""
+    read_input_text "Select packages"
+    for OPT in "${OPTIONS[@]}"; do
+      echo -ne " Installing (${_pkg_repo}) ${Bold}${packages[$OPT]}${Reset} "
+      pacman -S --needed "${packages[$OPT]}" >/dev/null 2>&1 &
+      pid=$! && progress $pid
+    done
+  done
+}
+#
+# System control
+#
+system_ctl() {
+  echo -ne " systemctl ${1} ${2} "
+  systemctl "${1}" "${2}" >/dev/null 2>&1 &
+  pid=$! && progress $pid
+}
+#
+# Check if an element exist in a string
+#
+contains_element() {
+  for e in "${@:2}"; do [[ "${e}" == "${1}" ]] && break; done
+}
+# Display [X] or [ ]
+checkbox() {
+  [[ "${1}" -eq 1 ]] && echo -e "${Bold}${Blue}[${Reset}${Bold}X${Bold}${Blue}]${Reset}" || echo -e "${Bold}${Blue}[ ${Bold}${Blue}]${Reset}"
+}
+#
+# Main menu item status
+#
+main_menu_item() {
+  # if the task is done make sure we get the state
+  if [ "${1}" == 1 ] && [ "${3}" != "" ]; then
+    state="${Bold}${Green}[${Reset}$3${Bold}${Green}]${Reset}"
+  fi
+  echo -e "$(checkbox "${1}") ${Bold}$2${Reset} ${state}"
+}
+#
+# Run when a script is called for the first time
+#
+if ! grep -q builder /etc/passwd && ! grep -q archiso /etc/hostname; then
+
+  # Enable the multi-lib repository
+  echo
+  echo "# ENABLING MULTI-LIB - https://wiki.archlinux.org/index.php/Official_repositories"
+  echo
+
+  if [[ "$(uname -m)" == x86_64 ]]; then
+    sed -i '/\[multilib\]/s/^#//g' /etc/pacman.conf
+    sed -i '/\[multilib\]/{n;s/^#//g}' /etc/pacman.conf
+  fi
+  pacman -Sy
+  read -er -p "Press enter to continue..."
+  clear
+
+  # Update pacman keys
+  if [[ ! -d /etc/pacman.d/gnupg ]]; then
+    echo
+    echo "# PACMAN KEY - https://wiki.archlinux.org/index.php/pacman-key"
+    echo
+    package_install haveged # Initializing the keyring requires entropy
+    haveged -w 1024
+    pacman-key --init
+    pacman-key --populate archlinux
+    pkill haveged
+    pacman -Rcsn --noconfirm haveged >/dev/null 2>&1 &
+    pid=$!
+    progress $pid
+    read -er -p "Press enter to continue..."
+    clear
+  fi
+
+  # Configure sudo
+  sed -i '/%wheel ALL=(ALL) ALL/s/^#//' /etc/sudoers
+
+  # Custom sudo configuration
+  {
+    echo
+    echo '## Custom configuration'
+    echo 'Defaults insults'
+    echo 'Defaults visiblepw'
+    echo 'Defaults passprompt="[sudo] password for %u: "'
+    echo 'Defaults editor=/usr/bin/vim:/usr/bin/vi:/usr/bin/nano'
+    echo 'Defaults logfile =/var/log/sudo.log, log_year, log_host, syslog=auth'
+  } >>/etc/sudoers
+
+  read -er -p "Press enter to continue..."
+  clear
+
+  useradd --create-home builder
+  passwd -d builder >/dev/null
+  echo "builder ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers
+
+  echo
+  echo "# INSTALLING YAY - https://wiki.archlinux.org/index.php/AUR_helpers"
+  echo
+
+  # exec command as builder instead of a root
+  pacman -D --asdeps go
+  su - builder -c "
+    [[ ! -d aur_packages ]] && mkdir aur_packages
+    cd aur_packages
+    curl -o yay.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz
+    tar zxvf yay.tar.gz
+    rm yay.tar.gz
+    cd yay
+    makepkg -csi --noconfirm
+  "
+  if ! is_package_installed "yay"; then
+    error_msg "yay installation failed!"
+  fi
+  read -er -p "Press enter to continue..."
+  clear
+fi
