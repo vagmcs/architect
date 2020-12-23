@@ -136,11 +136,12 @@ configure_mirror_list() {
   done
 
   # Base URL
-  url="https://www.archlinux.org/mirrorlist/?country=${COUNTRY_CODE}&use_mirror_status=on"
+  #url="https://www.archlinux.org/mirrorlist/?country=${COUNTRY_CODE}&use_mirror_status=on"
 
   # Get the latest mirror list and store it to tmp_file
   tmp_file=$(mktemp --suffix=-mirrorlist)
-  curl -so "${tmp_file}" "${url}"
+  #curl -so "${tmp_file}" "${url}"
+  reflector --latest 5 --sort rate --country "${COUNTRY_NAME}" --save "${tmp_file}"
   # Uncomment server URLs
   sed -i 's/^#Server/Server/g' "${tmp_file}"
 
