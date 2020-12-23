@@ -126,9 +126,9 @@ configure_mirror_list() {
 
   clear
   echo
-  echo "#MIRROR LIST - https://wiki.archlinux.org/index.php/Mirrors"
+  echo "# MIRROR LIST - https://wiki.archlinux.org/index.php/Mirrors"
   echo
-  
+
   OPTION=n
   while [[ "${OPTION}" != y ]]; do
     country_list
@@ -772,8 +772,9 @@ configure_locale() {
 configure_mkinitcpio() {
   clear
   echo
-  echo "MKINITCPIO - https://wiki.archlinux.org/index.php/Mkinitcpio"
+  echo "# MKINITCPIO - https://wiki.archlinux.org/index.php/Mkinitcpio"
   echo
+  
   # Do not forget to add hooks for LUKS encryption and LVM in case they are enabled
   # See:
   # 1. https://wiki.archlinux.org/index.php/Install_Arch_Linux_on_LVM#Adding_mkinitcpio_hooks
@@ -939,15 +940,15 @@ configure_bootloader() {
         part_uuid=$(blkid -s PARTUUID "${ROOT_MOUNT_POINT}" | awk '{print $2}' | sed 's/"//g' | sed 's/^.*=//')
 
         {
-        	"title Arch Linux"
-        	"linux /vmlinuz-${KERNEL_VERSION}"
-        	"initrd /initramfs-${KERNEL_VERSION}.img"
-        	"options root=PARTUUID=${part_uuid} rw"
+        	echo -e "title Arch Linux"
+        	echo -e "linux /vmlinuz-${KERNEL_VERSION}"
+        	echo -e "initrd /initramfs-${KERNEL_VERSION}.img"
+        	echo -e "options root=PARTUUID=${part_uuid} rw"
         } > "${MOUNT_POINT}${EFI_MOUNT_POINT}"/loader/entries/arch.conf
 
         {
-        	"default  arch"
-        	"timeout  5"
+        	echo -e "default  arch"
+        	echo -e "timeout  5"
         } > "${MOUNT_POINT}${EFI_MOUNT_POINT}"/loader/loader.conf
 
         read -e -sn 1 -r -p "Press enter to continue..."
