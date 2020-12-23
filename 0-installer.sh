@@ -774,7 +774,6 @@ configure_mkinitcpio() {
   echo
   echo "MKINITCPIO - https://wiki.archlinux.org/index.php/Mkinitcpio"
   echo
-  
   # Do not forget to add hooks for LUKS encryption and LVM in case they are enabled
   # See:
   # 1. https://wiki.archlinux.org/index.php/Install_Arch_Linux_on_LVM#Adding_mkinitcpio_hooks
@@ -935,7 +934,7 @@ configure_bootloader() {
     select OPT in "${systemd_boot_install_mode[@]}"; do
       case "$REPLY" in
       1)
-        arch_chroot "bootctl --path=${EFI_MOUNT_POINT} install"
+        arch_chroot "bootctl --boot-path=${EFI_MOUNT_POINT} install"
         warn_msg "Please check your .conf file"
         part_uuid=$(blkid -s PARTUUID "${ROOT_MOUNT_POINT}" | awk '{print $2}' | sed 's/"//g' | sed 's/^.*=//')
 
@@ -1028,7 +1027,10 @@ finish() {
 # MAIN FUNCTION {{{
 # shellcheck disable=SC2143
 [[ -n $(hdparm -I /dev/sda | grep TRIM 2> /dev/null) ]] && TRIM=1 # check for TRIM support (SSDs only)
-pacman -Sy && pacman -Sy terminus-font && setfont ter-v32b && loadkeys "${KEYMAP}" # set console font and keymap
+read_input_text "Use terminus font"
+if [[ "${OPTION}" == y ]]; then
+  pacman -Sy terminus-font && setfont ter-v32b && loadkeys "${KEYMAP}" # set console font and keymap
+fi
 check_boot_system
 read -e -sn 1 -r -p "Press enter to continue..."
 pacman -Sy "${EDITOR}"
