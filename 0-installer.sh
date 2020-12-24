@@ -41,7 +41,6 @@ arch_chroot() {
 #}}}
 # CHECK BOOT SYSTEM {{{
 check_boot_system() {
-  clear
 	echo
 	echo "# BOOT MODE - https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface"
 	echo
@@ -67,7 +66,6 @@ check_boot_system() {
 #}}}
 # SELECT KEYMAP {{{
 select_keymap() {
-  clear
   echo
   echo "# KEYMAP - https://wiki.archlinux.org/index.php/Keymap"
   echo
@@ -94,28 +92,22 @@ select_keymap() {
 # MIRROR LIST {{{
 configure_mirror_list() {
 
-  local countries_code=(
-  	"AU" "AT" "BD" "BY" "BE" "BA" "BR" "BG" "CA" "CL" "CN" "CO" "HR" "CZ" "DK" "EC" \
-  	"FI" "FR" "GE" "DE" "GR" "HK" "HU" "IS" "IN" "ID" "IR" "IE" "IL" "IT" "JP" "KZ" \
-  	"KE" "LV" "LT" "LU" "NL" "NC" "NZ" "MK" "NO" "PY" "PH" "PL" "PT" "RO" "RU" "RS" \
-  	"SG" "SK" "SI" "ZA" "KR" "ES" "SE" "CH" "TW" "TH" "TR" "UA" "GB" "US" "VN")
   local countries_name=(
-  	"Australia" "Austria" "Bangladesh" "Belarus" "Belgium" "Bosnia and Herzegovina" \
-  	"Brazil" "Bulgaria" "Canada" "Chile" "China" "Colombia" "Croatia" "Czech Republic" \
-  	"Denmark" "Ecuador" "Finland" "France" "Georgia" "Germany" "Greece" "Hong Kong" "Hungary" \
-  	"Iceland" "India" "Indonesia" "Iran" "Ireland" "Israel" "Italy" "Japan" "Kazakhstan" \
-  	"Kenya" "Latvia" "Lithuania" "Luxembourg" "Netherlands" "New Caledonia" "New Zealand" \
-  	"North Macedonia" "Norway" "Paraguay" "Philippines" "Poland" "Portugal" "Romania" \
-  	"Russia" "Serbia" "Singapore" "Slovakia" "Slovenia" "South Africa" "South Korea" "Spain" \
-  	"Sweden" "Switzerland" "Taiwan" "Thailand" "Turkey" "Ukraine" "United Kingdom" \
-  	"United States" "Vietnam")
+    "Australia" "Austria" "Bangladesh" "Belarus" "Belgium" "Bosnia and Herzegovina"
+    "Brazil" "Bulgaria" "Canada" "Chile" "China" "Colombia" "Croatia" "Czech Republic"
+    "Denmark" "Ecuador" "Finland" "France" "Georgia" "Germany" "Greece" "Hong Kong" "Hungary"
+    "Iceland" "India" "Indonesia" "Iran" "Ireland" "Israel" "Italy" "Japan" "Kazakhstan"
+    "Kenya" "Latvia" "Lithuania" "Luxembourg" "Netherlands" "New Caledonia" "New Zealand"
+    "North Macedonia" "Norway" "Paraguay" "Philippines" "Poland" "Portugal" "Romania"
+    "Russia" "Serbia" "Singapore" "Slovakia" "Slovenia" "South Africa" "South Korea" "Spain"
+    "Sweden" "Switzerland" "Taiwan" "Thailand" "Turkey" "Ukraine" "United Kingdom"
+    "United States" "Vietnam")
 
   country_list() {
     PS3="${PROMPT_1}"
     echo "Select your country:"
     select COUNTRY_NAME in "${countries_name[@]}"; do
       if contains_element "${COUNTRY_NAME}" "${countries_name[@]}"; then
-        COUNTRY_CODE="${countries_code[$((REPLY - 1))]}"
         break
       else
         echo "Invalid option. Try another one."
@@ -124,7 +116,6 @@ configure_mirror_list() {
     done
   }
 
-  clear
   echo
   echo "# MIRROR LIST - https://wiki.archlinux.org/index.php/Mirrors"
   echo
@@ -135,15 +126,9 @@ configure_mirror_list() {
     read_input_text "Confirm country: ${COUNTRY_NAME}"
   done
 
-  # Base URL
-  #url="https://www.archlinux.org/mirrorlist/?country=${COUNTRY_CODE}&use_mirror_status=on"
-
   # Get the latest mirror list and store it to tmp_file
   tmp_file=$(mktemp --suffix=-mirrorlist)
-  #curl -so "${tmp_file}" "${url}"
   reflector --latest 5 --sort rate --country "${COUNTRY_NAME}" --save "${tmp_file}"
-  # Uncomment server URLs
-  sed -i 's/^#Server/Server/g' "${tmp_file}"
 
   # Backup and replace current mirror list file (if tmp file is non-zero)
   if [[ -s "${tmp_file}" ]]; then
@@ -196,7 +181,6 @@ select_device() {
 #}}}
 # CREATE PARTITION SCHEME {{{
 create_partition_scheme() {
-  clear
   echo
   echo "# DISK PARTITION - https://wiki.archlinux.org/index.php/Partitioning"
   echo
@@ -263,7 +247,6 @@ create_partition() {
 #}}}
 # SELECT | FORMAT PARTITIONS {{{
 format_partitions() {
-  clear
   echo
   echo "# FORMAT PARTITIONS - https://wiki.archlinux.org/index.php/File_Systems"
   echo
@@ -491,7 +474,6 @@ select_linux_kernel() {
 }
 
 install_base_system() {
-  clear
   echo
   echo "# INSTALL BASE SYSTEM"
   echo
@@ -512,85 +494,13 @@ install_base_system() {
     pacstrap "${MOUNT_POINT}" cryptsetup
   fi
 
-  # Find ethernet and/or wireless devices
-  WIRED_DEV=$(ip link | grep "ens\|eno\|enp" | awk '{print $2}' | sed 's/://' | sed '1!d')
-  WIRELESS_DEV=$(ip link | grep wl | awk '{print $2}' | sed 's/://' | sed '1!d')
-
+  clear
   echo
- 	echo "# Network configuration - https://wiki.archlinux.org/index.php/Network_configuration"
+  echo "# Network configuration - https://wiki.archlinux.org/index.php/Network_configuration"
   echo
-  
-  network_config_list=('networkmanager' 'systemd-networkd/resolved' 'dhcpcd')
-  PS3="${PROMPT_1}"
-  select OPT in "${network_config_list[@]}"; do
-  	case "${REPLY}" in
-    1)
-      pacstrap "${MOUNT_POINT}" networkmanager
-      arch_chroot "systemctl enable NetworkManager.service"
-      ;;
-    2)
-			# Create configuration files for both ethernet and wireless devices
-			if [[ -n $WIRED_DEV ]]; then
-				{
-					"[Match]"
-					"Name=${WIRED_DEV}"
-					"[Network]"
-					"DHCP=yes"
-				} >> "${MOUNT_POINT}"/etc/systemd/network/20-wired.network
-			fi
-			if [[ -n $WIRELESS_DEV ]]; then
-				{
-					"[Match]"
-					"Name=${WIRELESS_DEV}"
-					"[Network]"
-					"DHCP=yes"
-				} >> "${MOUNT_POINT}"/etc/systemd/network/25-wireless.network
-				
-				OPTION=n
-			  read_input_text "Install iwd for wireless configuration"
-			  if [[ "${OPTION}" == y ]]; then
-			    pacstrap "${MOUNT_POINT}" iwd
-			    arch_chroot "systemctl enable iwd.service"
-			  fi
 
-			  OPTION=n
-			  read_input_text "Install wpa_supplicant for wireless configuration"
-			  if [[ "${OPTION}" == y ]]; then
-			    pacstrap "${MOUNT_POINT}" wpa_supplicant
-			  fi
-			fi
-
-			# Enable both the networkd and resolved (since we are using DHCP) services on startup
-			arch_chroot "systemctl enable systemd-resolved.service"
-      arch_chroot "systemctl enable systemd-networkd.service"
-      ;;
-    3)
-			# Enable dhcpcd
-			pacstrap "${MOUNT_POINT}" dhcpcd
-      arch_chroot "systemctl enable dhcpcd.service"
-
-    	if [[ -n "${WIRELESS_DEV}" ]]; then
-				OPTION=n
-			  read_input_text "Install iwd for wireless configuration"
-			  if [[ "${OPTION}" == y ]]; then
-			    pacstrap "${MOUNT_POINT}" iwd
-			    arch_chroot "systemctl enable iwd.service"
-			  fi
-
-			  OPTION=n
-			  read_input_text "Install wpa_supplicant for wireless configuration"
-			  if [[ "${OPTION}" == y ]]; then
-			    pacstrap "${MOUNT_POINT}" wpa_supplicant
-			  fi
-    	fi
-			;;
-    *) 
-      echo "Invalid option. Try another one."
-      read -e -sn 1 -r -p "Press enter to continue..."
-      ;;
-    esac
-    [[ -n "${OPT}" ]] && break
-  done
+  pacstrap "${MOUNT_POINT}" networkmanager
+  arch_chroot "systemctl enable NetworkManager.service"
 
   # Add KEYMAP to the setup
   echo "KEYMAP=${KEYMAP}" > "${MOUNT_POINT}"/etc/vconsole.conf
@@ -598,7 +508,6 @@ install_base_system() {
 #}}}
 # CONFIGURE FSTAB {{{
 configure_fstab() {
-  clear
   echo
   echo "# FSTAB - https://wiki.archlinux.org/index.php/Fstab"
   echo
@@ -638,13 +547,12 @@ configure_fstab() {
 #}}}
 # CONFIGURE HOSTNAME {{{
 configure_hostname() {
-  clear
   echo
   echo "# HOSTNAME - https://wiki.archlinux.org/index.php/Hostname"
   echo
   read -p "Hostname [example: archlinux]: " -r HOSTNAME
   echo "${HOSTNAME}" > "${MOUNT_POINT}"/etc/hostname
-  
+
   # populate the /etc/hosts file
   {
   	echo -e "127.0.0.1\tlocalhost"
@@ -685,7 +593,6 @@ configure_timezone() {
     done
   }
 
-  clear
   echo
 	echo "# TIMEZONE - https://wiki.archlinux.org/index.php/Timezone"
 	echo
@@ -708,7 +615,6 @@ configure_timezone() {
 #}}}
 # CONFIGURE HARDWARE CLOCK {{{
 configure_hardware_clock() {
-  clear
   echo
   echo "# HARDWARE CLOCK TIME"
   echo
@@ -739,7 +645,7 @@ configure_locale() {
 
 	set_locale() {
     # shellcheck disable=SC2207
-    local _locale_list=($(grep UTF-8 < /etc/locale.gen | sed 's/\..*$//' | sed '/@/d' | awk '{print $1}' | uniq | sed 's/#//g'));
+    local _locale_list=($(grep UTF-8 </etc/locale.gen | sed 's/\..*$//' | sed '/@/d' | awk '{print $1}' | uniq | sed 's/#//g'));
     PS3="${PROMPT_1}"
     echo "Select locale:"
     select LOCALE in "${_locale_list[@]}"; do
@@ -753,7 +659,6 @@ configure_locale() {
     done
   }
 
-  clear
   echo
   echo "# LOCALE - https://wiki.archlinux.org/index.php/Locale"
   echo
@@ -770,11 +675,9 @@ configure_locale() {
 #}}}
 # CONFIGURE MKINITCPIO {{{
 configure_mkinitcpio() {
-  clear
   echo
   echo "# MKINITCPIO - https://wiki.archlinux.org/index.php/Mkinitcpio"
   echo
-  
   # Do not forget to add hooks for LUKS encryption and LVM in case they are enabled
   # See:
   # 1. https://wiki.archlinux.org/index.php/Install_Arch_Linux_on_LVM#Adding_mkinitcpio_hooks
@@ -785,58 +688,30 @@ configure_mkinitcpio() {
 #}}}
 # INSTALL BOOTLOADER {{{
 install_bootloader() {
-  clear
   echo
   echo "BOOTLOADER - https://wiki.archlinux.org/index.php/Bootloader"
   echo
-  info_msg "ROOT Partition: ${ROOT_MOUNT_POINT}"
-  
+  [[ "${UEFI}" -eq 1 ]] && info_msg "EFI partition: ${EFI_MOUNT_POINT}"
+  info_msg "ROOT partition: ${ROOT_MOUNT_POINT}"
+
   if [[ "${UEFI}" -eq 1 ]]; then
     warn_msg "UEFI mode detected.\n"
-    bootloaders_list=("GRUB" "Syslinux" "systemd-boot" "rEFInd" "None")
+    bootloaders_list=("GRUB" "systemd-boot" "None")
   else
     warn_msg "BIOS mode detected.\n"
-    bootloaders_list=("GRUB" "Syslinux" "None")
+    bootloaders_list=("GRUB" "None")
   fi
-  
+
   PS3="${PROMPT_1}"
   echo "Install bootloader:"
   select BOOTLOADER in "${bootloaders_list[@]}"; do
     case "${REPLY}" in
     1)
-      pacstrap "${MOUNT_POINT}" grub
-      OPTION=n
-      read_input_text "Install os-prober"
-      if [[ "${OPTION}" == y ]]; then
-        pacstrap "${MOUNT_POINT}" os-prober
-      fi
+      pacstrap "${MOUNT_POINT}" grub os-prober
       break
       ;;
     2)
-      pacstrap "${MOUNT_POINT}" syslinux
       break
-      ;;
-    3)
-      break
-      ;;
-    4)
-      if [[ "${UEFI}" -eq 1 ]]; then
-        pacstrap "${MOUNT_POINT}" refind-efi
-        OPTION=n
-        read_input_text "Install os-prober"
-        if [[ "${OPTION}" == y ]]; then
-          pacstrap "${MOUNT_POINT}" os-prober
-        fi
-        break
-      else
-        echo "Invalid option. Try another one."
-        read -e -sn 1 -r -p "Press enter to continue..."
-      fi
-      ;;
-    5)
-			# shellcheck disable=SC2015
-      [[ "${UEFI}" -eq 1 ]] && break || echo "Invalid option. Try another one."
-      read -e -sn 1 -r -p "Press enter to continue..."
       ;;
     *)
       echo "Invalid option. Try another one."
@@ -879,71 +754,26 @@ configure_bootloader() {
     done
     arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
     ;;
-  Syslinux)
-    echo
-    echo "# SYSLINUX - https://wiki.archlinux.org/index.php/Syslinux"
-    echo
-    syslinux_install_mode=("[MBR] Automatic" "[PARTITION] Automatic" "Manual")
-    PS3="${PROMPT_1}"
-    echo "Syslinux Install:"
-    select OPT in "${syslinux_install_mode[@]}"; do
-      case "${REPLY}" in
-      1)
-        arch_chroot "syslinux-install_update -iam"
-        sed -i "s/vmlinuz-linux/vmlinuz-${KERNEL_VERSION}/g" "${MOUNT_POINT}${EFI_MOUNT_POINT}"/syslinux/syslinux.cfg
-        sed -i "s/initramfs-linux/initramfs-${KERNEL_VERSION}/g" "${MOUNT_POINT}${EFI_MOUNT_POINT}"/syslinux/syslinux.cfg
-        sed -i "s/sda[0-9]/${ROOT_PART}/g" "${MOUNT_POINT}${EFI_MOUNT_POINT}"/syslinux/syslinux.cfg
-
-        warn_msg "The partition in question needs to be the one you have as / (root), not /boot."
-        read -e -sn 1 -r -p "Press enter to continue..."
-        "${EDITOR}" "${MOUNT_POINT}${EFI_MOUNT_POINT}"/syslinux/syslinux.cfg
-        break
-        ;;
-      2)
-        arch_chroot "syslinux-install_update -i"
-        sed -i "s/vmlinuz-linux/vmlinuz-${KERNEL_VERSION}/g" "${MOUNT_POINT}${EFI_MOUNT_POINT}"/syslinux/syslinux.cfg
-        sed -i "s/initramfs-linux/initramfs-${KERNEL_VERSION}/g" "${MOUNT_POINT}${EFI_MOUNT_POINT}"/syslinux/syslinux.cfg
-				sed -i "s/sda[0-9]/${ROOT_PART}/g" "${MOUNT_POINT}${EFI_MOUNT_POINT}"/syslinux/syslinux.cfg
-
-        warn_msg "The partition in question needs to be the one you have as / (root), not /boot."
-        read -e -sn 1 -r -p "Press enter to continue..."
-        "${EDITOR}" "${MOUNT_POINT}${EFI_MOUNT_POINT}"/syslinux/syslinux.cfg
-        break
-        ;;
-      3)
-        info_msg "Your boot partition, on which you plan to install Syslinux, must contain a FAT, ext2, ext3, ext4, or Btrfs file system. You should install it on a mounted directory, not a /dev/sdXY partition. You do not have to install it on the root directory of a file system, e.g., with partition /dev/sda1 mounted on /boot you can install Syslinux in the syslinux directory"
-        echo -e "${PROMPT_3}"
-        warn_msg "mkdir /boot/syslinux\nextlinux --install /boot/syslinux "
-        arch-chroot "${MOUNT_POINT}"
-        break
-        ;;
-      *)
-        echo "Invalid option. Try another one."
-        read -e -sn 1 -r -p "Press enter to continue..."
-        ;;
-      esac
-    done
-    ;;
   systemd-boot)
     echo
     echo "# SYSTEMD-BOOT - https://wiki.archlinux.org/index.php/Systemd-boot"
     echo
     warn_msg "Systemd-boot heavily suggests that /boot is mounted to the EFI partition, not /boot/efi, in order to simplify updating and configuration.\n"
     systemd_boot_install_mode=("Automatic" "Manual")
-    PS3="$PROMPT_1"
+    PS3="${PROMPT_1}"
     echo -e "Systemd-boot install:\n"
     select OPT in "${systemd_boot_install_mode[@]}"; do
       case "$REPLY" in
       1)
-        arch_chroot "bootctl --boot-path=${EFI_MOUNT_POINT} install"
+        arch_chroot "bootctl --path=${EFI_MOUNT_POINT} install"
         warn_msg "Please check your .conf file"
-        part_uuid=$(blkid -s PARTUUID "${ROOT_MOUNT_POINT}" | awk '{print $2}' | sed 's/"//g' | sed 's/^.*=//')
+        uuid=$(blkid -s PARTUUID "${ROOT_MOUNT_POINT}" | awk '{print $2}' | sed 's/"//g' | sed 's/^.*=//')
 
         {
         	echo -e "title Arch Linux"
         	echo -e "linux /vmlinuz-${KERNEL_VERSION}"
         	echo -e "initrd /initramfs-${KERNEL_VERSION}.img"
-        	echo -e "options root=PARTUUID=${part_uuid} rw"
+        	echo -e "options root=PARTUUID=${uuid} rw"
         } > "${MOUNT_POINT}${EFI_MOUNT_POINT}"/loader/entries/arch.conf
 
         {
@@ -967,39 +797,12 @@ configure_bootloader() {
       esac
     done
     ;;
-  rEFInd)
-    echo
-    echo "rEFInd - https://wiki.archlinux.org/index.php/rEFInd"
-    echo
-    warn_msg "When refind-install (used in Automatic mode) is run in chroot (e.g. in the live system) /boot/refind-linux.conf is populated using kernel options from the live system not the installed one. You need to adjust the kernel options in /boot/refind-linux.conf manually."
-    rEFInd_install_mode=("Automatic" "Manual")
-    PS3="${PROMPT_1}"
-    echo "rEFInd install:"
-    select OPT in "${rEFInd_install_mode[@]}"; do
-      case "${REPLY}" in
-      1)
-        arch_chroot "refind-install"
-        "${EDITOR}" "${MOUNT_POINT}${EFI_MOUNT_POINT}"/refind_linux.conf
-        break
-        ;;
-      2)
-        arch-chroot "${MOUNT_POINT}"
-        break
-        ;;
-      *)
-        echo "Invalid option. Try another one."
-        read -e -sn 1 -r -p "Press enter to continue..."
-        ;;
-      esac
-    done
-    ;;
   esac
   read -e -sn 1 -r -p "Press enter to continue..."
 }
 #}}}
 # ROOT PASSWORD {{{
 root_password() {
-  clear
   echo
   echo "# ROOT PASSWORD"
   echo
@@ -1010,7 +813,6 @@ root_password() {
 #}}}
 # FINISH {{{
 finish() {
-  clear
   echo
   echo "# INSTALLATION COMPLETED"
   echo
@@ -1027,12 +829,12 @@ finish() {
 #}}}
 # MAIN FUNCTION {{{
 # shellcheck disable=SC2143
-[[ -n $(hdparm -I /dev/sda | grep TRIM 2> /dev/null) ]] && TRIM=1 # check for TRIM support (SSDs only)
-read_input_text "Use terminus font"
+[[ -n $(hdparm -I /dev/sda | grep TRIM 2>/dev/null) ]] && TRIM=1 # check for TRIM support (SSDs only)
+clear && read_input_text "Use terminus font"
 if [[ "${OPTION}" == y ]]; then
   pacman -Sy terminus-font && setfont ter-v32b && loadkeys "${KEYMAP}" # set console font and keymap
 fi
-check_boot_system
+clear && check_boot_system
 read -e -sn 1 -r -p "Press enter to continue..."
 pacman -Sy "${EDITOR}"
 
@@ -1042,7 +844,7 @@ while true; do
   echo "# ARCHITECT INSTALLER - https://github.com/vagmcs/architect"
   echo
   echo " 1) $(main_menu_item "${CHECKLIST[1]}" "Select Keymap" "${KEYMAP}")"
-  echo " 2) $(main_menu_item "${CHECKLIST[2]}" "Configure Mirrors" "${COUNTRY_NAME} (${COUNTRY_CODE})")"
+  echo " 2) $(main_menu_item "${CHECKLIST[2]}" "Configure Mirrors" "${COUNTRY_NAME}")"
   echo " 3) $(main_menu_item "${CHECKLIST[3]}" "Partition Scheme" "${partition_layout}: ${partition}(${filesystem}) swap(${swap_type})")"
   echo " 4) $(main_menu_item "${CHECKLIST[4]}" "Install Base System" "${KERNEL_VERSION}")"
   echo " 5) $(main_menu_item "${CHECKLIST[5]}" "Configure Fstab" "${FSTAB}")"
@@ -1061,58 +863,58 @@ while true; do
   for OPT in "${OPTIONS[@]}"; do
     case "$OPT" in
     1)
-      select_keymap
+      clear && select_keymap
       CHECKLIST[1]=1
       ;;
     2)
-      configure_mirror_list
+      clear && configure_mirror_list
       CHECKLIST[2]=1
       ;;
     3)
       umount_partitions
-      create_partition_scheme
-      format_partitions
+      clear && create_partition_scheme
+      clear && format_partitions
       CHECKLIST[3]=1
       ;;
     4)
-      install_base_system
+      clear && install_base_system
       CHECKLIST[4]=1
       ;;
     5)
-      configure_fstab
+      clear && configure_fstab
       CHECKLIST[5]=1
       ;;
     6)
-      configure_hostname
+      clear && configure_hostname
       CHECKLIST[6]=1
       ;;
     7)
-      configure_timezone
+      clear && configure_timezone
       CHECKLIST[7]=1
       ;;
     8)
-      configure_hardware_clock
+      clear && configure_hardware_clock
       CHECKLIST[8]=1
       ;;
     9)
-      configure_locale
+      clear && configure_locale
       CHECKLIST[9]=1
       ;;
     10)
-      configure_mkinitcpio
+      clear && configure_mkinitcpio
       CHECKLIST[10]=1
       ;;
     11)
-      install_bootloader
-      configure_bootloader
+      clear && install_bootloader
+      clear && configure_bootloader
       CHECKLIST[11]=1
       ;;
     12)
-      root_password
+      clear && root_password
       CHECKLIST[12]=1
       ;;
     "d")
-      finish
+      clear && finish
       ;;
     *)
       echo "Invalid option. Try another one."
