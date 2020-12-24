@@ -264,7 +264,7 @@ format_partitions() {
 
   # partitions based on boot system
   if [[ "${UEFI}" -eq 1 ]]; then
-    partition_name=("root" "EFI" "swap" "another")
+    partition_name=("EFI" "root" "swap" "another")
   else
     partition_name=("root" "swap" "another")
   fi
@@ -366,12 +366,12 @@ format_partitions() {
     fi
   }
 
-  set_efi_partition() {
-    efi_options=("/boot/efi" "/boot")
+  set_EFI_partition() {
+    EFI_options=("/boot" "/boot/efi")
     PS3="${PROMPT_1}"
     echo -e "Select EFI mount point:\n"
-    select EFI_MOUNT_POINT in "${efi_options[@]}"; do
-      if contains_element "${EFI_MOUNT_POINT}" "${efi_options[@]}"; then
+    select EFI_MOUNT_POINT in "${EFI_options[@]}"; do
+      if contains_element "${EFI_MOUNT_POINT}" "${EFI_options[@]}"; then
         break
       else
         echo "Invalid option. Try another one."
@@ -392,12 +392,11 @@ format_partitions() {
         if contains_element "${partition}" "${partitions_list[@]}"; then
           case ${partition_name[i]} in
             root)
-              ROOT_PART=$(echo "${partition}" | sed 's/\/dev\/mapper\///' | sed 's/\/dev\///')
               ROOT_MOUNT_POINT="${partition}"
               format_partition "${partition}" "${MOUNT_POINT}"
               ;;
             EFI)
-              set_efi_partition
+              set_EFI_partition
               read_input_text "Format ${partition} partition"
               if [[ "${OPTION}" == y ]]; then
                 format_partition "${partition}" "${MOUNT_POINT}${EFI_MOUNT_POINT}" vfat
@@ -445,7 +444,6 @@ format_partitions() {
 #}}}
 # INSTALL BASE SYSTEM {{{
 select_linux_kernel() {
-  clear
   echo
   echo "# LINUX KERNEL - https://wiki.archlinux.org/index.php/Kernel"
   echo
@@ -455,13 +453,13 @@ select_linux_kernel() {
   select VERSION in "${version_list[@]}"; do
     if contains_element "${VERSION}" "${version_list[@]}"; then
       if [ "linux (default)" == "${VERSION}" ]; then
-        pacstrap "${MOUNT_POINT}" base base-devel linux linux-headers linux-firmware man-db man-pages
+        pacstrap "${MOUNT_POINT}" base linux linux-headers linux-firmware
       elif [ "linux-lts (long term support)" == "${VERSION}" ]; then
-        pacstrap "${MOUNT_POINT}" base base-devel linux-lts linux-lts-headers linux-firmware man-db man-pages
+        pacstrap "${MOUNT_POINT}" base linux-lts linux-lts-headers linux-firmware
       elif [ "linux-hardened (security features)" == "${VERSION}" ]; then
-        pacstrap "${MOUNT_POINT}" base base-devel linux-hardened linux-hardened-headers linux-firmware man-db man-pages
+        pacstrap "${MOUNT_POINT}" base linux-hardened linux-hardened-headers linux-firmware
       elif [ "linux-zen (tuned kernel)" == "${VERSION}" ]; then
-        pacstrap "${MOUNT_POINT}" base base-devel linux-zen linux-zen-headers linux-firmware man-db man-pages
+        pacstrap "${MOUNT_POINT}" base linux-zen linux-zen-headers linux-firmware
       fi
       # shellcheck disable=SC2001
       KERNEL_VERSION=$(echo "${VERSION}" | sed 's/ .*//') # keep only the package name (remove the parenthesis)
@@ -469,41 +467,33 @@ select_linux_kernel() {
     else
       echo "Invalid option. Try another one."
       read -e -sn 1 -r -p "Press enter to continue..."
+      clear
     fi
   done
 }
-
 install_base_system() {
-  echo
-  echo "# INSTALL BASE SYSTEM"
-  echo
-
   pacman -Sy archlinux-keyring
   rm "${MOUNT_POINT}${EFI_MOUNT_POINT}"/vmlinuz-linux
   
   # Install Linux kernel and basic packages
-  select_linux_kernel
+  clear && select_linux_kernel
   # shellcheck disable=SC2181
   [[ $? -ne 0 ]] && error_msg "Installing base system to ${MOUNT_POINT} failed. Check the error messages above."
 
+  echo
+  echo "# INSTALL BASE SYSTEM"
+  echo
+
   # Install lvm and crypt setup system tools if LVM and/or LUKS is detected
-  if [[ "${LVM}" -eq 1 ]]; then
-    pacstrap "${MOUNT_POINT}" lvm2
-  fi
-  if [[ "${LUKS}" -eq 1 ]]; then
-    pacstrap "${MOUNT_POINT}" cryptsetup
-  fi
+  [[ "${LVM}" -eq 1 ]] && pacstrap "${MOUNT_POINT}" lvm2
+  [[ "${LUKS}" -eq 1 ]] && pacstrap "${MOUNT_POINT}" cryptsetup
 
-  clear
-  echo
-  echo "# Network configuration - https://wiki.archlinux.org/index.php/Network_configuration"
-  echo
-
-  pacstrap "${MOUNT_POINT}" networkmanager
+  pacstrap "${MOUNT_POINT}" base-devel man-db man-pages neovim networkmanager
   arch_chroot "systemctl enable NetworkManager.service"
 
   # Add KEYMAP to the setup
   echo "KEYMAP=${KEYMAP}" > "${MOUNT_POINT}"/etc/vconsole.conf
+  read -e -sn 1 -r -p "Press enter to continue..."
 }
 #}}}
 # CONFIGURE FSTAB {{{
@@ -642,7 +632,6 @@ configure_hardware_clock() {
 #}}}
 # CONFIGURE LOCALE {{{
 configure_locale() {
-
 	set_locale() {
     # shellcheck disable=SC2207
     local _locale_list=($(grep UTF-8 </etc/locale.gen | sed 's/\..*$//' | sed '/@/d' | awk '{print $1}' | uniq | sed 's/#//g'));
@@ -689,7 +678,7 @@ configure_mkinitcpio() {
 # INSTALL BOOTLOADER {{{
 install_bootloader() {
   echo
-  echo "BOOTLOADER - https://wiki.archlinux.org/index.php/Bootloader"
+  echo "# BOOTLOADER - https://wiki.archlinux.org/index.php/Bootloader"
   echo
   [[ "${UEFI}" -eq 1 ]] && info_msg "EFI partition: ${EFI_MOUNT_POINT}"
   info_msg "ROOT partition: ${ROOT_MOUNT_POINT}"
@@ -706,13 +695,8 @@ install_bootloader() {
   echo "Install bootloader:"
   select BOOTLOADER in "${bootloaders_list[@]}"; do
     case "${REPLY}" in
-    1)
-      pacstrap "${MOUNT_POINT}" grub os-prober
-      break
-      ;;
-    2)
-      break
-      ;;
+    1) pacstrap "${MOUNT_POINT}" grub os-prober && break ;;
+    2) break ;;
     *)
       echo "Invalid option. Try another one."
       read -e -sn 1 -r -p "Press enter to continue..."
@@ -761,7 +745,7 @@ configure_bootloader() {
     warn_msg "Systemd-boot heavily suggests that /boot is mounted to the EFI partition, not /boot/efi, in order to simplify updating and configuration.\n"
     systemd_boot_install_mode=("Automatic" "Manual")
     PS3="${PROMPT_1}"
-    echo -e "Systemd-boot install:\n"
+    echo "Systemd-boot install:"
     select OPT in "${systemd_boot_install_mode[@]}"; do
       case "$REPLY" in
       1)
@@ -777,8 +761,8 @@ configure_bootloader() {
         } > "${MOUNT_POINT}${EFI_MOUNT_POINT}"/loader/entries/arch.conf
 
         {
-        	echo -e "default  arch"
-        	echo -e "timeout  5"
+        	echo -e "default arch"
+        	echo -e "timeout 5"
         } > "${MOUNT_POINT}${EFI_MOUNT_POINT}"/loader/loader.conf
 
         read -e -sn 1 -r -p "Press enter to continue..."
@@ -816,23 +800,21 @@ finish() {
   echo
   echo "# INSTALLATION COMPLETED"
   echo
-  # Copy repo to the root folder of the installed system
-  warn_msg "A copy of the repo was placed in /root directory of the installed system.\n"
+  warn_msg "A copy of the repo is placed in /root directory of the installed system.\n"
   cp -R "$(pwd)" "${MOUNT_POINT}"/root
   read_input_text "Reboot system"
-  if [[ "${OPTION}" == y ]]; then
-    umount_partitions
-    reboot
-  fi
+  [[ "${OPTION}" == y ]] && umount_partitions && reboot
   exit 0
 }
 #}}}
 # MAIN FUNCTION {{{
 # shellcheck disable=SC2143
 [[ -n $(hdparm -I /dev/sda | grep TRIM 2>/dev/null) ]] && TRIM=1 # check for TRIM support (SSDs only)
-clear && read_input_text "Use terminus font"
+clear && read_input_text "Do you need a larger font"
 if [[ "${OPTION}" == y ]]; then
   pacman -Sy terminus-font && setfont ter-v32b && loadkeys "${KEYMAP}" # set console font and keymap
+else
+  setfont lat2-16 && loadkeys "${KEYMAP}"
 fi
 clear && check_boot_system
 read -e -sn 1 -r -p "Press enter to continue..."
