@@ -25,7 +25,7 @@ source utils && clear
 KERNEL_VERSION="$(ls /boot | grep vmlinuz | sed s/vmlinuz-//)"
 
 echo
-echo "INSTALLING XORG - https://wiki.archlinux.org/index.php/Xorg"
+echo "# INSTALLING XORG - https://wiki.archlinux.org/index.php/Xorg"
 echo
 
 PACKAGES=(
@@ -71,9 +71,8 @@ PACKAGES=(
     lib32-nvidia-utils             # NVIDIA drivers utilities (32bit)
 
     # VirtualBox Drivers
-    virtualbox-guest-modules-arch  # Virtualbox host kernel modules
-    virtualbox-guest-dkms          # Virtualbox host kernel modules for custom and LTS kernels
-    virtualbox-guest-utils         # VirtualBox Guest userspace utilities
+    virtualbox-guest-utils         # VirtualBox guest userspace utilities
+    virtualbox-guest-dkms          # Virtualbox guest kernel modules for custom and LTS kernels
 )
 
 for PKG in "${PACKAGES[@]}"; do
