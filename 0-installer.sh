@@ -21,7 +21,7 @@
 source utils
 
 # GLOBAL VARIABLES AND UTILITY FUNCTIONS {{{
-CHECKLIST=( 0 0 0 0 0 0 0 0 0 0 0 0 )
+CHECKLIST=(0 0 0 0 0 0 0 0 0 0 0 0)
 
 UEFI=0
 TRIM=0
@@ -35,20 +35,21 @@ MOUNT_POINT="/mnt"
 
 EDITOR="vim"
 
-arch_chroot() { 
+arch_chroot() {
   arch-chroot "${MOUNT_POINT}" /bin/bash -c "${1}"
 }
 #}}}
 # CHECK BOOT SYSTEM {{{
 check_boot_system() {
-	echo
-	echo "# BOOT MODE - https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface"
-	echo
+  echo
+  echo "# BOOT MODE - https://wiki.archlinux.org/index.php/Unified_Extensible_Firmware_Interface"
+  echo
 
-  if [[ "$(cat /sys/class/dmi/id/sys_vendor)" == 'Apple Inc.' ]] || [[ "$(cat /sys/class/dmi/id/sys_vendor)" == 'Apple Computer, Inc.' ]]; then
-    modprobe -r -q efivars || true  # if MAC
+  if [[ "$(cat /sys/class/dmi/id/sys_vendor)" == 'Apple Inc.' ]] ||
+    [[ "$(cat /sys/class/dmi/id/sys_vendor)" == 'Apple Computer, Inc.' ]]; then
+    modprobe -r -q efivars || true # if MAC
   else
-    modprobe -q efivarfs            # all others
+    modprobe -q efivarfs # all others
   fi
   if [[ -d "/sys/firmware/efi/" ]]; then
     ## Mount EFI variable filesystem if it is not already mounted by systemd
@@ -74,7 +75,7 @@ select_keymap() {
   readarray keymaps < <(localectl list-keymaps | sort -V) # read all available keymaps
   local keymap_list=()
   for entry in "${keymaps[@]}"; do
-	  keymap_list+=("${entry::-1}") # remove trailing \n
+    keymap_list+=("${entry::-1}") # remove trailing \n
   done
 
   PS3="${PROMPT_1}"
@@ -91,17 +92,19 @@ select_keymap() {
 #}}}
 # MIRROR LIST {{{
 configure_mirror_list() {
+  #  local countries_name=(
+  #    "Australia" "Austria" "Bangladesh" "Belarus" "Belgium" "Bosnia and Herzegovina"
+  #    "Brazil" "Bulgaria" "Canada" "Chile" "China" "Colombia" "Croatia" "Czech Republic"
+  #    "Denmark" "Ecuador" "Finland" "France" "Georgia" "Germany" "Greece" "Hong Kong" "Hungary"
+  #    "Iceland" "India" "Indonesia" "Iran" "Ireland" "Israel" "Italy" "Japan" "Kazakhstan"
+  #    "Kenya" "Latvia" "Lithuania" "Luxembourg" "Netherlands" "New Caledonia" "New Zealand"
+  #    "North Macedonia" "Norway" "Paraguay" "Philippines" "Poland" "Portugal" "Romania"
+  #    "Russia" "Serbia" "Singapore" "Slovakia" "Slovenia" "South Africa" "South Korea" "Spain"
+  #    "Sweden" "Switzerland" "Taiwan" "Thailand" "Turkey" "Ukraine" "United Kingdom"
+  #    "United States" "Vietnam")
 
-  local countries_name=(
-    "Australia" "Austria" "Bangladesh" "Belarus" "Belgium" "Bosnia and Herzegovina"
-    "Brazil" "Bulgaria" "Canada" "Chile" "China" "Colombia" "Croatia" "Czech Republic"
-    "Denmark" "Ecuador" "Finland" "France" "Georgia" "Germany" "Greece" "Hong Kong" "Hungary"
-    "Iceland" "India" "Indonesia" "Iran" "Ireland" "Israel" "Italy" "Japan" "Kazakhstan"
-    "Kenya" "Latvia" "Lithuania" "Luxembourg" "Netherlands" "New Caledonia" "New Zealand"
-    "North Macedonia" "Norway" "Paraguay" "Philippines" "Poland" "Portugal" "Romania"
-    "Russia" "Serbia" "Singapore" "Slovakia" "Slovenia" "South Africa" "South Korea" "Spain"
-    "Sweden" "Switzerland" "Taiwan" "Thailand" "Turkey" "Ukraine" "United Kingdom"
-    "United States" "Vietnam")
+  # shellcheck disable=SC2207
+  countries_name=($(reflector --list-countries | awk '{print $1}'))
 
   country_list() {
     PS3="${PROMPT_1}"
@@ -127,18 +130,18 @@ configure_mirror_list() {
   done
 
   # Get the latest mirror list and store it to tmp_file
-  tmp_file=$(mktemp --suffix=-mirrorlist)
-  reflector --latest 5 --sort rate --country "${COUNTRY_NAME}" --save "${tmp_file}"
+  #tmp_file=$(mktemp --suffix=-mirrorlist)
+  reflector --latest 5 --sort rate --country "${COUNTRY_NAME}" --save /etc/pacman.d/mirrorlist #"${tmp_file}"
 
   # Backup and replace current mirror list file (if tmp file is non-zero)
-  if [[ -s "${tmp_file}" ]]; then
-    echo "Moving the updated list into place..."
-    cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bk # keep a backup of the full mirror list
-    mv "${tmp_file}" /etc/pacman.d/mirrorlist
-  else
-    echo "Unable to update, could not download mirror list!"
-  fi
-  
+  #  if [[ -s "${tmp_file}" ]]; then
+  #    echo "Moving the updated list into place..."
+  #    cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bk # keep a backup of the full mirror list
+  #    mv "${tmp_file}" /etc/pacman.d/mirrorlist
+  #  else
+  #    echo "Unable to update, could not download mirror list!"
+  #  fi
+
   # Fastest repo should go first
   pacman -Sy pacman-contrib
   cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.tmp
@@ -162,14 +165,14 @@ umount_partitions() {
 #}}}
 # SELECT DEVICE {{{
 select_device() {
-	# shellcheck disable=SC2207
-	devices_list=($(lsblk -d | awk '{print "/dev/" $1}' | grep 'sd\|hd\|vd\|nvme\|mmcblk'))
+  # shellcheck disable=SC2207
+  devices=($(lsblk -d | awk '{print "/dev/" $1}' | grep 'sd\|hd\|vd\|nvme\|mmcblk'))
   PS3="${PROMPT_1}"
   echo -e "\nAvailable devices:\n"
   lsblk -lnp -I 2,3,8,9,22,34,56,57,58,65,66,67,68,69,70,71,72,91,128,129,130,131,132,133,134,135,259 | awk '{print $1,$4,$6,$7}' | column -t
   echo -e "\nSelect device to partition:\n"
-  select device in "${devices_list[@]}"; do
-    if contains_element "${device}" "${devices_list[@]}"; then
+  select device in "${devices[@]}"; do
+    if contains_element "${device}" "${devices[@]}"; then
       break
     else
       echo "Invalid option. Try another one."
@@ -184,10 +187,9 @@ create_partition_scheme() {
   echo
   echo "# DISK PARTITION - https://wiki.archlinux.org/index.php/Partitioning"
   echo
-  partition_layouts=("Simple" "Custom [LVM, RAID, LUKS]" "Maintain Current")
   PS3="${PROMPT_1}"
   echo -e "Select partition scheme:\n"
-  select OPT in "${partition_layouts[@]}"; do
+  select OPT in "Simple" "Custom [LVM, RAID, LUKS]" "Maintain Current"; do
     partition_layout="${OPT}"
     case "${REPLY}" in
     1)
@@ -198,13 +200,9 @@ create_partition_scheme() {
       bash -i
       # check if LVM and/or LUKS is used
       check_lvm=$(lsblk -lp | grep lvm)
-      if [[ -z "${check_lvm}" ]]; then
-      	LVM=1
-      fi
+      [[ -z "${check_lvm}" ]] && LVM=1
       check_luks=$(blkid | grep LUKS)
-      if [[ -z "${check_luks}" ]]; then
-      	LUKS=1
-      fi
+      [[ -z "${check_luks}" ]] && LUKS=1
       ;;
     3)
       # enable device mapper and scan for LVM block devices
@@ -251,7 +249,7 @@ format_partitions() {
   echo "# FORMAT PARTITIONS - https://wiki.archlinux.org/index.php/File_Systems"
   echo
   danger_msg "All data on the ROOT and SWAP partition will be LOST.\n"
-  
+
   i=0
 
   # shellcheck disable=SC2207
@@ -262,9 +260,9 @@ format_partitions() {
     error_msg "No partitions found."
   fi
 
-  # partitions based on boot system
+  # partitions based on boot system (root MUST always be mounted first)
   if [[ "${UEFI}" -eq 1 ]]; then
-    partition_name=("EFI" "root" "swap" "another")
+    partition_name=("root" "EFI" "swap" "another")
   else
     partition_name=("root" "swap" "another")
   fi
@@ -292,7 +290,7 @@ format_partitions() {
   }
 
   format_partition() {
-    read_input_text "Confirm format $1 partition"
+    read_input_text "Confirm format ${1} partition"
     if [[ "${OPTION}" == y ]]; then
       [[ -z "${3}" ]] && select_filesystem || filesystem="${3}"
       # shellcheck disable=SC2046
@@ -308,7 +306,7 @@ format_partitions() {
   }
 
   format_swap_partition() {
-    read_input_text "Confirm format $1 partition"
+    read_input_text "Confirm format ${1} partition"
     if [[ "${OPTION}" == y ]]; then
       mkswap "${1}"
       swapon "${1}"
@@ -317,10 +315,9 @@ format_partitions() {
   }
 
   create_swap() {
-    swap_options=("partition" "file" "skip")
     PS3="${PROMPT_1}"
     echo -e "\nSelect ${Bold:?}${Yellow:?}${partition_name[i]}${Reset:?} filesystem:\n"
-    select OPT in "${swap_options[@]}"; do
+    select OPT in "partition" "file" "skip"; do
       case "${REPLY}" in
       1)
         select partition in "${partitions_list[@]}"; do
@@ -447,7 +444,7 @@ select_linux_kernel() {
   echo
   echo "# LINUX KERNEL - https://wiki.archlinux.org/index.php/Kernel"
   echo
-  version_list=("linux (default)" "linux-lts (long term support)" "linux-hardened (security features)" "linux-zen (tuned kernel)")
+  version_list=("linux (default)" "linux-lts (long term support)" "linux-hardened (security)" "linux-zen (tuned)")
   PS3="${PROMPT_1}"
   echo "Select linux kernel version to install:"
   select VERSION in "${version_list[@]}"; do
@@ -467,27 +464,27 @@ select_linux_kernel() {
     else
       echo "Invalid option. Try another one."
       read -e -sn 1 -r -p "Press enter to continue..."
-      clear
     fi
   done
 }
 install_base_system() {
+  echo
+  echo "# INSTALL BASE SYSTEM"
+  echo
+
   pacman -Sy archlinux-keyring
   rm "${MOUNT_POINT}${EFI_MOUNT_POINT}"/vmlinuz-linux
-  
+
   # Install Linux kernel and basic packages
   clear && select_linux_kernel
   # shellcheck disable=SC2181
   [[ $? -ne 0 ]] && error_msg "Installing base system to ${MOUNT_POINT} failed. Check the error messages above."
 
-  echo
-  echo "# INSTALL BASE SYSTEM"
-  echo
-
   # Install lvm and crypt setup system tools if LVM and/or LUKS is detected
   [[ "${LVM}" -eq 1 ]] && pacstrap "${MOUNT_POINT}" lvm2
   [[ "${LUKS}" -eq 1 ]] && pacstrap "${MOUNT_POINT}" cryptsetup
 
+  # Install basic system tools and networking
   pacstrap "${MOUNT_POINT}" base-devel man-db man-pages neovim networkmanager
   arch_chroot "systemctl enable NetworkManager.service"
 
@@ -501,30 +498,20 @@ configure_fstab() {
   echo
   echo "# FSTAB - https://wiki.archlinux.org/index.php/Fstab"
   echo
-
-  fstab_list=("DEV" "UUID" "LABEL")
-
   PS3="${PROMPT_1}"
   echo "Configure fstab based on:"
-  select OPT in "${fstab_list[@]}"; do
+  select OPT in "DEV" "UUID" "LABEL"; do
     case "${REPLY}" in
-    1)
-      genfstab -p "${MOUNT_POINT}" > "${MOUNT_POINT}"/etc/fstab
-      ;;
+    1) genfstab -p "${MOUNT_POINT}" > "${MOUNT_POINT}"/etc/fstab ;;
     2)
-      if [[ "${UEFI}" -eq 1 ]]; then
-        genfstab -t PARTUUID -p "${MOUNT_POINT}" > "${MOUNT_POINT}"/etc/fstab
-      else
-        genfstab -U -p "${MOUNT_POINT}" > "${MOUNT_POINT}"/etc/fstab
-      fi
+      [[ "${UEFI}" -eq 1 ]] && genfstab -t PARTUUID -p "${MOUNT_POINT}" > "${MOUNT_POINT}"/etc/fstab
+      [[ "${UEFI}" -eq 0 ]] && genfstab -U -p "${MOUNT_POINT}" > "${MOUNT_POINT}"/etc/fstab
       ;;
-    3)
-      genfstab -L -p "${MOUNT_POINT}" > "${MOUNT_POINT}"/etc/fstab
-      ;;
-    *) 
+    3) genfstab -L -p "${MOUNT_POINT}" > "${MOUNT_POINT}"/etc/fstab ;;
+    *)
       echo "Invalid option. Try another one."
       read -e -sn 1 -r -p "Press enter to continue..."
-     ;;
+      ;;
     esac
     [[ -n "${OPT}" ]] && break
   done
@@ -545,24 +532,23 @@ configure_hostname() {
 
   # populate the /etc/hosts file
   {
-  	echo -e "127.0.0.1\tlocalhost"
-  	echo -e "::1\t\tlocalhost"
-  	echo -e "127.0.0.1\t${HOSTNAME}.localdomain\t${HOSTNAME}"
+    echo -e "127.0.0.1\tlocalhost"
+    echo -e "::1\t\tlocalhost"
+    echo -e "127.0.0.1\t${HOSTNAME}.localdomain\t${HOSTNAME}"
   } > "${MOUNT_POINT}"/etc/hosts
-  
+
   "${EDITOR}" "${MOUNT_POINT}"/etc/hosts
 }
 #}}}
 # CONFIGURE TIMEZONE {{{
 configure_timezone() {
-
-	set_timezone() {
+  set_timezone() {
     # shellcheck disable=SC2207
     local _zones=($(timedatectl list-timezones | sed 's/\/.*$//' | uniq))
     PS3="${PROMPT_1}"
     echo "Select zone:"
     select ZONE in "${_zones[@]}"; do
-      if contains_element "$ZONE" "${_zones[@]}"; then
+      if contains_element "${ZONE}" "${_zones[@]}"; then
         # shellcheck disable=SC2207
         local _sub_zones=($(timedatectl list-timezones | grep "${ZONE}" | sed 's/^.*\///'))
         PS3="${PROMPT_1}"
@@ -586,7 +572,6 @@ configure_timezone() {
   echo
 	echo "# TIMEZONE - https://wiki.archlinux.org/index.php/Timezone"
 	echo
-
   OPTION=n
   while [[ "${OPTION}" != y ]]; do
     set_timezone
@@ -608,22 +593,16 @@ configure_hardware_clock() {
   echo
   echo "# HARDWARE CLOCK TIME"
   echo
-  warn_msg "Use the same hardware clock mode among your operating systems, otherwise they may overwrite the time and cause clock shifts.\n"
-  
-  hw_clock_list=('UTC' 'Localtime')
+  warn_msg "Use the same hardware clock mode among your operating systems, otherwise they may cause clock shifts.\n"
   PS3="${PROMPT_1}"
-  select OPT in "${hw_clock_list[@]}"; do
+  select OPT in "UTC" "Localtime"; do
     case "${REPLY}" in
-    1)
-      arch_chroot "hwclock --systohc --utc"
-      ;;
-    2)
-      arch_chroot "hwclock --systohc --localtime"
-      ;;
-    *) 
-			echo "Invalid option. Try another one."
+    1) arch_chroot "hwclock --systohc --utc" ;;
+    2) arch_chroot "hwclock --systohc --localtime" ;;
+    *)
+      echo "Invalid option. Try another one."
       read -e -sn 1 -r -p "Press enter to continue..."
-			;;
+      ;;
     esac
     [[ -n "${OPT}" ]] && break
   done
@@ -632,9 +611,9 @@ configure_hardware_clock() {
 #}}}
 # CONFIGURE LOCALE {{{
 configure_locale() {
-	set_locale() {
+  set_locale() {
     # shellcheck disable=SC2207
-    local _locale_list=($(grep UTF-8 </etc/locale.gen | sed 's/\..*$//' | sed '/@/d' | awk '{print $1}' | uniq | sed 's/#//g'));
+    local _locale_list=($(grep UTF-8 </etc/locale.gen | sed 's/\..*$//' | sed '/@/d' | awk '{print $1}' | uniq | sed 's/#//g'))
     PS3="${PROMPT_1}"
     echo "Select locale:"
     select LOCALE in "${_locale_list[@]}"; do
@@ -754,15 +733,15 @@ configure_bootloader() {
         uuid=$(blkid -s PARTUUID "${ROOT_MOUNT_POINT}" | awk '{print $2}' | sed 's/"//g' | sed 's/^.*=//')
 
         {
-        	echo -e "title Arch Linux"
-        	echo -e "linux /vmlinuz-${KERNEL_VERSION}"
-        	echo -e "initrd /initramfs-${KERNEL_VERSION}.img"
-        	echo -e "options root=PARTUUID=${uuid} rw"
+          echo -e "title Arch Linux"
+          echo -e "linux /vmlinuz-${KERNEL_VERSION}"
+          echo -e "initrd /initramfs-${KERNEL_VERSION}.img"
+          echo -e "options root=PARTUUID=${uuid} rw"
         } > "${MOUNT_POINT}${EFI_MOUNT_POINT}"/loader/entries/arch.conf
 
         {
-        	echo -e "default arch"
-        	echo -e "timeout 5"
+          echo -e "default arch"
+          echo -e "timeout 5"
         } > "${MOUNT_POINT}${EFI_MOUNT_POINT}"/loader/loader.conf
 
         read -e -sn 1 -r -p "Press enter to continue..."
