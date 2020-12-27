@@ -21,7 +21,7 @@
 source utils && clear
 
 echo
-echo "INSTALLING NETWORK COMPONENTS - https://wiki.archlinux.org/index.php/Network_configuration"
+echo "# INSTALLING NETWORK COMPONENTS - https://wiki.archlinux.org/index.php/Network_configuration"
 echo
 
 
