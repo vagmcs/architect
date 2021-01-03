@@ -63,6 +63,7 @@ check_boot_system() {
     UEFI=0
     info_msg "BIOS mode detected.\n"
   fi
+  read -e -sn 1 -r -p "Press enter to continue..."
 }
 #}}}
 # SELECT KEYMAP {{{
@@ -692,10 +693,9 @@ configure_bootloader() {
     echo
     echo "# GRUB - https://wiki.archlinux.org/index.php/GRUB"
     echo
-    grub_install_mode=("Automatic" "Manual")
     PS3="${PROMPT_1}"
     echo "Grub Install:"
-    select OPT in "${grub_install_mode[@]}"; do
+    select OPT in "Automatic" "Manual"; do
       case "${REPLY}" in
       1)
         if [[ "${UEFI}" -eq 1 ]]; then
@@ -722,11 +722,10 @@ configure_bootloader() {
     echo "# SYSTEMD-BOOT - https://wiki.archlinux.org/index.php/Systemd-boot"
     echo
     warn_msg "Systemd-boot heavily suggests that /boot is mounted to the EFI partition, not /boot/efi, in order to simplify updating and configuration.\n"
-    systemd_boot_install_mode=("Automatic" "Manual")
     PS3="${PROMPT_1}"
     echo "Systemd-boot install:"
-    select OPT in "${systemd_boot_install_mode[@]}"; do
-      case "$REPLY" in
+    select OPT in "Automatic" "Manual"; do
+      case "${REPLY}" in
       1)
         arch_chroot "bootctl --path=${EFI_MOUNT_POINT} install"
         warn_msg "Please check your .conf file"
@@ -790,13 +789,12 @@ finish() {
 # shellcheck disable=SC2143
 [[ -n $(hdparm -I /dev/sda | grep TRIM 2>/dev/null) ]] && TRIM=1 # check for TRIM support (SSDs only)
 clear && read_input_text "Do you need a larger font"
-if [[ "${OPTION}" == y ]]; then
-  pacman -Sy terminus-font && setfont ter-v32b && loadkeys "${KEYMAP}" # set console font and keymap
+if [[ "${OPTION}" == y ]]; then # set console font and keymap
+  pacman -Sy terminus-font && setfont ter-v32b && loadkeys "${KEYMAP}"
 else
-  setfont lat2-16 && loadkeys "${KEYMAP}"
+  pacman -Sy terminus-font && setfont ter-v16b && loadkeys "${KEYMAP}"
 fi
 clear && check_boot_system
-read -e -sn 1 -r -p "Press enter to continue..."
 pacman -Sy "${EDITOR}"
 
 while true; do
