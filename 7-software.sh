@@ -28,110 +28,127 @@ PACKAGES=(
 
     # SYSTEM --------------------------------------------------------------
 
-    linux-lts             # Long term support kernel
-    pamac-aur             # Standalone GTK 3 package manager
+    linux-lts                 # Long term support kernel
+    pamac-aur                 # Standalone GTK3 package manager
+    lxappearance-gtk3         # GTK+ theme changer
 
     # TERMINAL UTILITIES --------------------------------------------------
 
-    bash-completion       # Tab completion for Bash
-    bashtop               # Resource monitor
-    bat                   # Cat clone having syntax highlighting
-    bc                    # Precision calculator language
-    colordiff             # diff replacement
-    cpio                  # Copy files into or out of an archive
-    curl                  # Remote content retrieval
-    emacs                 # EMACS editor
-    exa                   # ls replacement
-    figlet                # ASCII art from ordinary text
-    fzf                   # Fuzzy finder
-    gnupg                 # OpenPGP standard
-    htop                  # Resource monitor
-    inetutils             # A collection of common network programs
-    p7zip                 # 7zip compression program
-    pdftk                 # PDF tools
-    prettyping            # A colorful ping wrapper
-    pydf                  # A colorized df clone
-    python-pywal          # Generate colorschemes on the fly
-    jq                    # JSON parsing library
-    lhasa                 # lhasa compression algorithm
-    lpsolve               # Mixed Integer Linear Programming solver
-    lrzip                 # Compression algorithm
-    lz4                   # lz4 compression algorithm
-    lzip                  # Compression algorithm
-    lzop                  # Compression algorithm
-    ncdu                  # Simple ncurses disk usage analyzer
-    neofetch              # Shows system info when you launch terminal
-    neovim                # Neovim editor
-    ntp                   # Network Time Protocol to set time via network
-    openssh               # SSH connectivity tools
-    rsync                 # Remote file sync utility
-    speedtest-cli         # Internet speed via terminal
-    tldr                  # Simplified and community-driven man pages
-    tmux                  # Terminal multiplexer
-    trash-cli             # Command line trashcan interface
-    unrar                 # RAR compression program
-    unzip                 # Zip compression program
-    wget                  # Remote content retrieval
-    zip                   # Zip compression program
-    zsh                   # ZSH shell
-    zsh-completions       # Tab completion for ZSH
+    alacritty                 # A GPU-accelerated terminal emulator
+    bash-completion           # Tab completion for Bash
+    bashtop                   # Resource monitor
+    bat                       # Cat clone having syntax highlighting
+    bc                        # Precision calculator language
+    colordiff                 # diff replacement
+    cmus                      # Very feature-rich ncurses-based music player
+    cpio                      # Copy files into or out of an archive
+    curl                      # Remote content retrieval
+    emacs                     # EMACS editor
+    exa                       # ls replacement
+    figlet                    # ASCII art from ordinary text
+    fzf                       # Fuzzy finder
+    gnupg                     # OpenPGP standard
+    htop                      # Resource monitor
+    inetutils                 # A collection of common network programs
+    p7zip                     # 7zip compression program
+    pdftk                     # PDF tools
+    pkgfile                   # a pacman .files metadata explorer
+    prettyping                # A colorful ping wrapper
+    pydf                      # A colorized df clone
+    python-pywal              # Generate colorschemes on the fly
+    jq                        # JSON parsing library
+    lhasa                     # lhasa compression algorithm
+    lpsolve                   # Mixed Integer Linear Programming solver
+    lrzip                     # Compression algorithm
+    lz4                       # lz4 compression algorithm
+    lzip                      # Compression algorithm
+    lzop                      # Compression algorithm
+    ncdu                      # Simple ncurses disk usage analyzer
+    neofetch                  # Shows system info when you launch terminal
+    neomutt                   # Command line mail reader
+    neovim                    # Neovim editor
+    ntp                       # Network Time Protocol to set time via network
+    openssh                   # SSH connectivity tools
+    rsync                     # Remote file sync utility
+    speedtest-cli             # Internet speed via terminal
+    tmux                      # Terminal multiplexer
+    trash-cli                 # Command line trashcan interface
+    ueberzug                  # Command line util that displays images in X11
+    unclutter                 # A small program for hiding the mouse cursor
+    unrar                     # RAR compression program
+    unzip                     # Zip compression program
+    wget                      # Remote content retrieval
+    xclip                     # Command line interface to the X11 clipboard
+    xsel                      # Command line program for copy and paste operations.
+    zip                       # Zip compression program
+    zsh                       # ZSH shell
+    zsh-completions           # Tab completion for ZSH
+    zsh-syntax-highlighting   # Fish shell like syntax highlighting for Zsh
+    zsh-autosuggestions       # zsh-autosuggestions
 
     # DOCUMENTS -----------------------------------------------------------
 
-    pdfgrep               # Tool to search text in PDF files
-    texlive-bin           # TeX Live binaries
-    texlive-most          # TeX Live distribution
-    texlive-langgreek     # TeX Live Greek language support
-    zathura               # Minimalistic document viewer
-    zotero                # A tool to collect, organize, cite, and share research sources
+    pdfgrep                   # Tool to search text in PDF files
+    foliate                   # Simple and modern GTK eBook reader
+    texlive-bin               # TeX Live binaries
+    texlive-most              # TeX Live distribution
+    texlive-langgreek         # TeX Live Greek language support
+    zathura                   # Minimalistic document viewer
+    zathura-pdf-poppler       # PDF using the poppler engine
+    zathura-ps                # PS support using the spectre library
+    zotero                    # A tool to collect, organize, cite, and share research sources
 
     # DISK UTILITIES ------------------------------------------------------
 
-    autofs                # Auto-mounter
-    e2fsprogs             # Ext2/3/4 filesystem tools
-    dosfstools            # DOS filesystem tools
-    exfatprogs            # exFAT filesystem tools for the Linux Kernel driver
-    ntfs-3g               # Open source implementation of NTFS file system
-    usbutils              # USB tools to query connected USB devices
-    gptfdisk              # A text-mode partitioning tool that works on GUID Partition Table (GPT) disks
+    autofs                    # Auto-mounter
+    e2fsprogs                 # Ext2/3/4 filesystem tools
+    dosfstools                # DOS filesystem tools
+    exfatprogs                # exFAT filesystem tools for the Linux Kernel driver
+    ntfs-3g                   # Open source implementation of NTFS file system
+    usbutils                  # USB tools to query connected USB devices
+    gptfdisk                  # A text-mode partitioning tool that works on GUID Partition Table (GPT) disks
 
     # DEVELOPMENT ---------------------------------------------------------
 
-    clang                 # C Lang compiler
-    cmake                 # Cross-platform open-source make system
-    git                   # Version control system
-    github-cli            # GitHub CLI
-    git-lfs               # Git extension for versioning large files
-    maven                 # Java project management
-    postgresql            # Sophisticated object-relational DBMS
-    python                # Python language
-    python-pip            # PyPA tool for installing Python packages
-    jetbrains-toolbox     # Manage JetBrains Projects and Tools
+    clang                     # C Lang compiler
+    cmake                     # Cross-platform open-source make system
+    git                       # Version control system
+    github-cli                # GitHub CLI
+    git-lfs                   # Git extension for versioning large files
+    jetbrains-toolbox         # Manage JetBrains Projects and Tools
+    maven                     # Java project management
+    nodejs                    # Event driven I/O for V8 javascript
+    postgresql                # Sophisticated object-relational DBMS
+    python                    # Python language
+    python-pip                # PyPA tool for installing Python packages
 
     # MEDIA ---------------------------------------------------------------
 
-    mpv                  # A free, open source, and cross-platform media player
-    spotify              # A proprietary music streaming service
-    spotify-tui          # Spotify client for the terminal
-    streamlink           # CLI program that launches streams in a custom video player
-    youtube-dl           # A command-line program to download videos from YouTube.com
+    celluloid                 # Simple GTK+ frontend for mpv
+    mpv                       # A free, open source, and cross-platform media player
+    spotify                   # A proprietary music streaming service
+    spotify-tui               # Spotify client for the terminal
+    spicetify-cli             # Command-line tool to customize Spotify client
+    streamlink                # CLI program that launches streams in a custom video player
+    sxiv                      # Simple X Image Viewer
+    youtube-dl                # A command-line program to download videos from YouTube.com
 
     # INTERNET AND CLOUD --------------------------------------------------
 
-    firefox              # Standalone web browser
-    insync               # A Google Drive and OneDrive client
-    owncloud-client      # ownCloud client
-    thunderbird          # Standalone mail reader
-    transmission-gtk     # Fast, easy and free torrent client
+    firefox                   # Standalone web browser
+    insync                    # A Google Drive and OneDrive client
+    owncloud-client           # ownCloud client
+    thunderbird               # Standalone mail reader
+    transmission-gtk          # Fast, easy and free torrent client
 
     # VECTOR GRAPHICS EDITORS ---------------------------------------------
 
-    inkscape             # Vector graphics editor
+    inkscape                  # Vector graphics editor
 
     # GAMING --------------------------------------------------------------
 
-    discord              # Voice and text chat for gamers
-    steam                # Valve's game distribution platform
+    discord                   # Voice and text chat for gamers
+    steam                     # Valve's game distribution platform
 )
 
 for PKG in "${PACKAGES[@]}"; do
