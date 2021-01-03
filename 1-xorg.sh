@@ -32,9 +32,8 @@ PACKAGES=(
 
     # Xorg
     xorg-server                    # XOrg server
-    xorg-apps                      # XOrg apps group
     xorg-xinit                     # XOrg init
-    xorg-xinput                    # Tool for configuring devices
+    xorg-apps                      # XOrg apps group
 
     # Intel Drivers
     xf86-video-intel               # 2D/3D Intel video driver
