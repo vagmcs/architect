@@ -218,6 +218,7 @@ main_menu_item() {
 if ! grep -q builder /etc/passwd && ! grep -q archiso /etc/hostname; then
 
   # Enable the multi-lib repository
+  clear
   echo
   echo "# ENABLING MULTI-LIB - https://wiki.archlinux.org/index.php/Official_repositories"
   echo
