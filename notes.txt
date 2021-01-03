@@ -7,31 +7,8 @@ gst-libav
 ffmpegthumbnailer
 ffmpegthumbs
 
-arandr
+deja-dup
+borg
 
-# Notification helper
-dunst
-
-# Wallpaper setter
-nitrogen
-
-# Volume control
-volwheel
-pavucontrol
-
-# Imange viewers
-feh
-viewnior
-
-# PDF viewers
-mupdf
-epdfview
-
-# File managers
-thunar
-nautilus
-xarchiver
-
-system-config-printer
-gtk3-print-backends
-lxappearance
+alacrity theme in gnome
+use alacrity as default in nautilus

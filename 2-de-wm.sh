@@ -20,22 +20,12 @@
 
 source utils && clear
 
-#
-#
-#
-config_x_init_rc() {
-  cp -fv /etc/X11/xinit/xinitrc /home/vagmcs/.xinitrc
-  echo -e "exec ${1}" >>/home/vagmcs/.xinitrc
-  chown -R vagmcs:users /home/vagmcs/.xinitrc
-}
-
 echo
-echo "INSTALLING DE or WM - https://wiki.archlinux.org/index.php/General_recommendations#Desktop_environments"
+echo "# INSTALLING DE or WM - https://wiki.archlinux.org/index.php/General_recommendations#Desktop_environments"
 echo
 
 PACKAGES=(
 
-    picom   # Compositor (shadows and transparency)
     xdg-user-dirs-gtk
 
     #
@@ -44,62 +34,43 @@ PACKAGES=(
 
     # QTile
     qtile
+    picom         # Compositor (shadows and transparency)
+    python-psutil
     rofi
-
-    # BSPWM
-    bspwm
-
-    # Xmonad
-    xmonad
-    xmonad-contrib
-    xmobar
-    xterm
-
-    # i3
-    i3-gaps
-    i3status
-    i3lock
+    dunst         # Notification helper
     dmenu
-
-    # DWM
-    dwm
-
-    # Awesome
-    awesome
-    polybar
+    polkit-gnome
 
     # GNOME
-    gnome
-    gnome-extra
-    gnome-tweaks
+    baobab # A graphical directory tree analyzer
+    evince # Document viewer
+    file-roller # Create and modify archives
+    gnome-calculator # GNOME Scientific calculator
+    gnome-shell # Next generation desktop shell
+    gnome-tweaks # Graphical interface for advanced GNOME 3 settings
+    mutter # A window manager for GNOME
+    nautilus
+    sushi
+
     gnome-usage
+    dconf-editor
+    gnome-todo
+    gnome-nettool
+
     gnome-initial-setup
     deja-dup
     gedit-plugins
     gnome-power-manager
     nautilus-share
     gnome-defaults-list
+    gnome-search-tool
+    system-config-printer
+    gtk3-print-backends
 )
 
 for PKG in "${PACKAGES[@]}"; do
   package_install "${PKG}"
 done
-
-if [[ ! -d /home/${username}/.config/qtile/ ]]; then
-  mkdir -p /home/"${username}"/.config/qtile/
-  cp /usr/share/doc/qtile/default_config.py /home/"${username}"/.config/qtile/config.py
-  chown -R "${username}":users /home/"${username}"/.config
-fi
-if [[ ! -d /home/${username}/.config/bspwm/ ]]; then
-  mkdir -p /home/"${username}"/.config/bspwm/
-  cp /usr/share/doc/bspwm/examples/{bspwmrc,sxhkdrc} /home/"${username}"/.config/bspwm/
-  chown -R "${username}":users /home/"${username}"/.config
-fi
-if [[ ! -d /home/${username}/.config/awesome/ ]]; then
-  mkdir -p /home/"${username}"/.config/awesome/
-  cp /etc/xdg/awesome/rc.lua /home/"${username}"/.config/awesome/
-  chown -R "${username}":users /home/"${username}"/.config
-fi
 
 system_ctl enable gdm
 system_ctl enable lightdm
