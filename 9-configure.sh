@@ -81,6 +81,22 @@ su - "${USERNAME}" -c "
   config config --local status.showUntrackedFiles no
 "
 
+# Download Java, Scala and SBT
+wget https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u275-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
+tar -zxf OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
+mv jdk8u275-b01 home/"${USERNAME}"/Usr/jdk8u275-b01
+ln -sf /home/"${USERNAME}"/Usr/opt/jdk8u275-b01 java
+
+wget https://downloads.lightbend.com/scala/2.13.4/scala-2.13.4.tgz
+tar -zxf scala-2.13.4.tgz
+mv scala-2.13.4 /home/"${USERNAME}"/Usr/opt
+ln -sf /home/"${USERNAME}"/Usr/opt/scala-2.13.4 scala
+
+wget https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.tgz
+tar -zxf sbt-1.4.5.tgz
+mv sbt-1.4.5.tgz /home/"${USERNAME}"/Usr/sbt-1.4.5
+ln -sf /home/"${USERNAME}"/Usr/opt/sbt-1.4.5 sbt
+
 # Download wallpapers
 git clone https://github.com/vagmcs/wallpapers /home/"${USERNAME}"/Pictures
 
