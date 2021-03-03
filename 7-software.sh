@@ -39,7 +39,6 @@ PACKAGES=(
     bashtop                   # Resource monitor
     bat                       # Cat clone having syntax highlighting
     bc                        # Precision calculator language
-    colordiff                 # diff replacement
     cmus                      # Very feature-rich ncurses-based music player
     cpio                      # Copy files into or out of an archive
     curl                      # Remote content retrieval
