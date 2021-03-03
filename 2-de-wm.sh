@@ -26,13 +26,15 @@ echo
 
 PACKAGES=(
 
-    xdg-user-dirs-gtk
+    #
+    # General
+    #
+    xdg-user-dirs-gtk                 # Creates user dirs
 
     #
-    gdm
-    lightdm
-
     # QTile
+    #
+    lightdm
     qtile
     picom         # Compositor (shadows and transparency)
     python-psutil
@@ -41,31 +43,51 @@ PACKAGES=(
     dmenu
     polkit-gnome
 
+    #
     # GNOME
-    baobab # A graphical directory tree analyzer
-    evince # Document viewer
-    file-roller # Create and modify archives
-    gnome-calculator # GNOME Scientific calculator
-    gnome-shell # Next generation desktop shell
-    gnome-tweaks # Graphical interface for advanced GNOME 3 settings
-    mutter # A window manager for GNOME
-    nautilus
-    sushi
-
-    gnome-usage
-    dconf-editor
-    gnome-todo
-    gnome-nettool
-
-    gnome-initial-setup
-    deja-dup
-    gedit-plugins
-    gnome-power-manager
-    nautilus-share
-    gnome-defaults-list
-    gnome-search-tool
-    system-config-printer
-    gtk3-print-backends
+    #
+    baobab                            # A graphical directory tree analyzer
+    dconf-editor                      # Configuration editor
+    eog 	                            # Eye of Gnome: An image viewer
+    evince                            # Document viewer (PDF, PostScript, XPS, djvu, dvi, tiff, cbr, cbz, cb7, cbt)
+    file-roller                       # Create and modify archives
+    gdm                               # Display manager and login screen
+    gedit                             # GNOME text editor
+    gedit-plugins                     # GNOME text editor plugins
+    deja-dup                          # Simple backup tool
+    gnome-calculator                  # GNOME calculator
+    gnome-characters                  # A character map application
+    gnome-color-manager               # GNOME Color Profile Tools
+    gnome-control-center              # GNOME main interface to configure various aspects of the desktop
+    gnome-disk-utility 	              # Disk Management for GNOME
+    gnome-screenshot                  # Take pictures of your screen
+    gnome-session 	                  # The GNOME Session Handler
+    gnome-settings-daemon 	          # GNOME Settings Daemon
+    gnome-shell 	                    # Next generation desktop shell
+    gnome-shell-extensions            # Extensions for GNOME shell, including classic mode
+    gnome-software 	                  # GNOME Software Tools
+ 	  gnome-software-packagekit-plugin  # PackageKit support plugin for GNOME Software
+ 	  gnome-sound-recorder              # Simple audio recordings
+ 	  gnome-system-monitor 	            # View current processes and monitor system state
+    gnome-terminal 	                  # GNOME terminal
+    gnome-tweaks                      # Graphical interface for advanced GNOME 3 settings
+    gnome-usage                       # Application to view information about use of system resources
+ 	  gnome-user-share 	                # Easy to use user-level file sharing for GNOME
+    gvfs                              #	Virtual filesystem implementation for GIO
+    gvfs-afc                          # Virtual filesystem implementation for GIO (AFC backend; Apple mobile devices)
+    gvfs-goa                          # Virtual filesystem implementation for GIO (Gnome Online Accounts backend)
+    gvfs-google                       # Virtual filesystem implementation for GIO (Google Drive backend)
+    gvfs-gphoto2                      # Virtual filesystem implementation for GIO (PTP camera, MTP media player)
+    gvfs-mtp 	                        # Virtual filesystem implementation for GIO (MTP backend; Android, media player)
+    gvfs-nfs                          # Virtual filesystem implementation for GIO (NFS backend)
+    gvfs-smb                          # Virtual filesystem implementation for GIO (SMB/CIFS backend)
+    insync-nautilus                   # Nautilus extension and icons for integrating inSync
+    mutter                            # GNOME window manager
+    nautilus                          # GNOME file manager
+    nautilus-sendto                   # Easily send files via mail
+    nautilus-share                    # Nautilus extension to share folder using Samba
+    nautilus-image-converter          # Nautilus extension to rotate/resize image files
+    sushi                             # A quick previewer for Nautilus
 )
 
 for PKG in "${PACKAGES[@]}"; do
