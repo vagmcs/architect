@@ -70,8 +70,10 @@ echo "# USER ENVIRONMENT CONFIGURATION"
 echo
 
 # Make directories
-mkdir -p "/home/${USERNAME}/.local/opt"
-mkdir -p "/home/${USERNAME}/Work/dev"
+su - "${USERNAME}" -c "
+  mkdir -p .local/opt
+  mkdir -p Work/dev
+"
 
 # Download dotfiles and checkout
 git clone https://github.com/vagmcs/dotfiles /home/"${USERNAME}"/Work/dev/dotfiles
