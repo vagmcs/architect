@@ -93,19 +93,9 @@ select_keymap() {
 #}}}
 # MIRROR LIST {{{
 configure_mirror_list() {
-  #  local countries_name=(
-  #    "Australia" "Austria" "Bangladesh" "Belarus" "Belgium" "Bosnia and Herzegovina"
-  #    "Brazil" "Bulgaria" "Canada" "Chile" "China" "Colombia" "Croatia" "Czech Republic"
-  #    "Denmark" "Ecuador" "Finland" "France" "Georgia" "Germany" "Greece" "Hong Kong" "Hungary"
-  #    "Iceland" "India" "Indonesia" "Iran" "Ireland" "Israel" "Italy" "Japan" "Kazakhstan"
-  #    "Kenya" "Latvia" "Lithuania" "Luxembourg" "Netherlands" "New Caledonia" "New Zealand"
-  #    "North Macedonia" "Norway" "Paraguay" "Philippines" "Poland" "Portugal" "Romania"
-  #    "Russia" "Serbia" "Singapore" "Slovakia" "Slovenia" "South Africa" "South Korea" "Spain"
-  #    "Sweden" "Switzerland" "Taiwan" "Thailand" "Turkey" "Ukraine" "United Kingdom"
-  #    "United States" "Vietnam")
 
   # shellcheck disable=SC2207
-  countries_name=($(reflector --list-countries | awk '{print $1}'))
+  countries_name=($(reflector --list-countries | awk '{if (NR>2) print $1}'))
 
   country_list() {
     PS3="${PROMPT_1}"
@@ -130,18 +120,8 @@ configure_mirror_list() {
     read_input_text "Confirm country: ${COUNTRY_NAME}"
   done
 
-  # Get the latest mirror list and store it to tmp_file
-  #tmp_file=$(mktemp --suffix=-mirrorlist)
-  reflector --latest 5 --sort rate --country "${COUNTRY_NAME}" --save /etc/pacman.d/mirrorlist #"${tmp_file}"
-
-  # Backup and replace current mirror list file (if tmp file is non-zero)
-  #  if [[ -s "${tmp_file}" ]]; then
-  #    echo "Moving the updated list into place..."
-  #    cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bk # keep a backup of the full mirror list
-  #    mv "${tmp_file}" /etc/pacman.d/mirrorlist
-  #  else
-  #    echo "Unable to update, could not download mirror list!"
-  #  fi
+  # Get the latest mirror list
+  reflector --latest 5 --sort rate --country "${COUNTRY_NAME}" --save /etc/pacman.d/mirrorlist
 
   # Fastest repo should go first
   pacman -Sy pacman-contrib
