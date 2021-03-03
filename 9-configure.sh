@@ -20,7 +20,6 @@
 
 source utils
 
-
 echo
 echo "# CREATE USER - https://wiki.archlinux.org/index.php/Users_and_Groups"
 echo
@@ -71,46 +70,49 @@ echo "# USER ENVIRONMENT CONFIGURATION"
 echo
 
 # Make directories
-mkdir -p "/home/${USERNAME}/Usr/opt"
-mkdir -p "/home/${USERNAME}/Usr/dev"
+mkdir -p "/home/${USERNAME}/.local/opt"
+mkdir -p "/home/${USERNAME}/Work/dev"
 
 # Download dotfiles and checkout
-git clone https://github.com/vagmcs/dotfiles /home/"${USERNAME}"/Usr/dev/dotfiles
+git clone https://github.com/vagmcs/dotfiles /home/"${USERNAME}"/Work/dev/dotfiles
 su - "${USERNAME}" -c "
-  git --git-dir=Usr/dev/dotfiles --work-tree=. reset --hard HEAD
+  git --git-dir=Work/dev/dotfiles --work-tree=. reset --hard HEAD
   config config --local status.showUntrackedFiles no
 "
 
 # Download Java, Scala and SBT
 wget https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u275-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
 tar -zxf OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
-mv jdk8u275-b01 home/"${USERNAME}"/Usr/jdk8u275-b01
-ln -sf /home/"${USERNAME}"/Usr/opt/jdk8u275-b01 java
+mv jdk8u275-b01 home/"${USERNAME}"/.local/opt
+ln -sf /home/"${USERNAME}"/.local/opt/jdk8u275-b01 /home/"${USERNAME}"/.local/opt/java
+rm -rf OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
 
 wget https://downloads.lightbend.com/scala/2.13.4/scala-2.13.4.tgz
 tar -zxf scala-2.13.4.tgz
-mv scala-2.13.4 /home/"${USERNAME}"/Usr/opt
-ln -sf /home/"${USERNAME}"/Usr/opt/scala-2.13.4 scala
+mv scala-2.13.4 /home/"${USERNAME}"/.local/opt
+ln -sf /home/"${USERNAME}"/.local/opt/scala-2.13.4 /home/"${USERNAME}"/.local/opt/scala
+rm -rf scala-2.13.4.tgz
 
 wget https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.tgz
 tar -zxf sbt-1.4.5.tgz
-mv sbt-1.4.5.tgz /home/"${USERNAME}"/Usr/sbt-1.4.5
-ln -sf /home/"${USERNAME}"/Usr/opt/sbt-1.4.5 sbt
+mv sbt /home/"${USERNAME}"/.local/opt/sbt-1.4.5
+ln -sf /home/"${USERNAME}"/.local/opt/sbt-1.4.5 /home/"${USERNAME}"/.local/opt/sbt
+rm -rf sbt-1.4.5.tgz
 
 # Download wallpapers
 git clone https://github.com/vagmcs/wallpapers /home/"${USERNAME}"/Pictures
 
 # Download personal projects
-git clone https://github.com/vagmcs/ScalaTIKZ /home/"${USERNAME}"/Usr/dev/ScalaTIKZ
-git clone https://github.com/vagmcs/Optimus /home/"${USERNAME}"/Usr/dev/Optimus
-git clone https://github.com/vagmcs/PRML /home/"${USERNAME}"/Usr/dev/PRML
-git clone https://github.com/vagmcs/architect /home/"${USERNAME}"/Usr/dev/architect
+git clone https://github.com/vagmcs/ScalaTIKZ /home/"${USERNAME}"/Work/dev/ScalaTIKZ
+git clone https://github.com/vagmcs/Optimus /home/"${USERNAME}"/Work/dev/Optimus
+git clone https://github.com/vagmcs/PRML /home/"${USERNAME}"/Work/dev/PRML
+git clone https://github.com/vagmcs/architect /home/"${USERNAME}"/Work/dev/architect
 
 # Install VIM plugin manager
 curl -fLo /home/"${USERNAME}"/.config/nvim/autoload/plug.vim --create-dirs \
      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-# Install VIM essential
+# Globally install VIM essentials
 pip install pynvim
 npm i -g neovim
 
