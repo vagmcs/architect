@@ -118,6 +118,7 @@ PACKAGES=(
     maven                     # Java project management
     nodejs                    # Event driven I/O for V8 javascript
     postgresql                # Sophisticated object-relational DBMS
+    pyenv                     # Manage Python versions
     python                    # Python language
     python-pip                # PyPA tool for installing Python packages
 
