@@ -107,6 +107,11 @@ PACKAGES=(
     usbutils                  # USB tools to query connected USB devices
     gptfdisk                  # A text-mode partitioning tool that works on GUID Partition Table (GPT) disks
 
+    # BACKUP
+
+    deja-dup                  # Simple backup tool
+    timeshift                 # System restore utility
+
     # DEVELOPMENT ---------------------------------------------------------
 
     clang                     # C Lang compiler
