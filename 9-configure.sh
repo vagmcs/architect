@@ -71,12 +71,13 @@ echo
 
 # Make directories
 su - "${USERNAME}" -c "
+  mkdir -p .local/bin
   mkdir -p .local/opt
   mkdir -p Work/dev
 "
 
 # Download dotfiles and checkout
-git clone https://github.com/vagmcs/dotfiles /home/"${USERNAME}"/Work/dev/dotfiles
+git clone --bare https://github.com/vagmcs/dotfiles /home/"${USERNAME}"/Work/dev/dotfiles
 su - "${USERNAME}" -c "
   git --git-dir=Work/dev/dotfiles --work-tree=. reset --hard HEAD
   config config --local status.showUntrackedFiles no
@@ -85,7 +86,7 @@ su - "${USERNAME}" -c "
 # Download Java, Scala and SBT
 wget https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u275-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
 tar -zxf OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
-mv jdk8u275-b01 home/"${USERNAME}"/.local/opt
+mv jdk8u275-b01 /home/"${USERNAME}"/.local/opt
 ln -sf /home/"${USERNAME}"/.local/opt/jdk8u275-b01 /home/"${USERNAME}"/.local/opt/java
 rm -rf OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
 
@@ -102,7 +103,7 @@ ln -sf /home/"${USERNAME}"/.local/opt/sbt-1.4.5 /home/"${USERNAME}"/.local/opt/s
 rm -rf sbt-1.4.5.tgz
 
 # Download wallpapers
-git clone https://github.com/vagmcs/wallpapers /home/"${USERNAME}"/Pictures
+git clone https://github.com/vagmcs/wallpapers /home/"${USERNAME}"/Pictures/wallpapers
 
 # Download personal projects
 git clone https://github.com/vagmcs/ScalaTIKZ /home/"${USERNAME}"/Work/dev/ScalaTIKZ

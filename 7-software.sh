@@ -122,6 +122,7 @@ PACKAGES=(
     jetbrains-toolbox         # Manage JetBrains Projects and Tools
     maven                     # Java project management
     nodejs                    # Event driven I/O for V8 javascript
+    npm                       # A package manager for javascript
     postgresql                # Sophisticated object-relational DBMS
     pyenv                     # Manage Python versions
     python                    # Python language
