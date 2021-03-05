@@ -26,13 +26,13 @@ echo
 
 PACKAGES=(
     adobe-source-code-pro-fonts  # Monospaced font for user interface and coding environments
-    nerd-fonts-fira-code         # Patched font Fira Code from the nerd-fonts library
+    nerd-fonts-fira-code         # Patched font FirA Code from the nerd-fonts library
     nerd-fonts-hack              # Patched font Hack from nerd-fonts library
     nerd-fonts-inconsolata       # Patched font In-consolata from the nerd-fonts library
     nerd-fonts-jetbrains-mono    # Patched font JetBrains Mono from nerd-fonts library
     nerd-fonts-source-code-pro   # Patched font SourceCodePro from nerd-fonts library
     nerd-fonts-ubuntu-mono       # Patched font UbuntuMono from the nerd-fonts library
-    noto-fonts-emoji             # Google Noto emoji fonts
+    noto-fonts-emoji             # Google 'NO more TOfu' emoji fonts
     ttf-fira-code                # Monospaced font that includes programming ligatures
     ttf-hack                     # A hand groomed and optically balanced typeface
     ttf-inconsolata              # Monospace font for pretty code listings
