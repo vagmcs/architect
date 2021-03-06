@@ -44,7 +44,7 @@ PACKAGES=(
     polkit-gnome
 
     #
-    # GNOME
+    # GNOME (MINIMAL)
     #
     baobab                            # A graphical directory tree analyzer
     dconf-editor                      # Configuration editor
@@ -52,8 +52,6 @@ PACKAGES=(
     evince                            # Document viewer (PDF, PostScript, XPS, djvu, dvi, tiff, cbr, cbz, cb7, cbt)
     file-roller                       # Create and modify archives
     gdm                               # Display manager and login screen
-    gedit                             # GNOME text editor
-    gedit-plugins                     # GNOME text editor plugins
     gnome-calculator                  # GNOME calculator
     gnome-characters                  # A character map application
     gnome-color-manager               # GNOME Color Profile Tools
@@ -68,7 +66,6 @@ PACKAGES=(
  	  gnome-system-monitor 	            # View current processes and monitor system state
     gnome-terminal 	                  # GNOME terminal
     gnome-tweaks                      # Graphical interface for advanced GNOME 3 settings
-    gnome-usage                       # Application to view information about use of system resources
  	  gnome-user-share 	                # Easy to use user-level file sharing for GNOME
     gvfs                              #	Virtual filesystem implementation for GIO
     gvfs-afc                          # Virtual filesystem implementation for GIO (AFC backend; Apple mobile devices)
@@ -85,6 +82,8 @@ PACKAGES=(
     nautilus-share                    # Nautilus extension to share folder using Samba
     nautilus-image-converter          # Nautilus extension to rotate/resize image files
     sushi                             # A quick previewer for Nautilus
+    tracker3                          # Desktop-neutral user information store, search tool and indexer
+    tracker3-miners 	                # Collection of data extractors for Tracker/Nepomuk
 )
 
 for PKG in "${PACKAGES[@]}"; do
