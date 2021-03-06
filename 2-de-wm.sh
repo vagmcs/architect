@@ -54,7 +54,6 @@ PACKAGES=(
     gdm                               # Display manager and login screen
     gedit                             # GNOME text editor
     gedit-plugins                     # GNOME text editor plugins
-    deja-dup                          # Simple backup tool
     gnome-calculator                  # GNOME calculator
     gnome-characters                  # A character map application
     gnome-color-manager               # GNOME Color Profile Tools
@@ -65,8 +64,6 @@ PACKAGES=(
     gnome-settings-daemon 	          # GNOME Settings Daemon
     gnome-shell 	                    # Next generation desktop shell
     gnome-shell-extensions            # Extensions for GNOME shell, including classic mode
-    gnome-software 	                  # GNOME Software Tools
- 	  gnome-software-packagekit-plugin  # PackageKit support plugin for GNOME Software
  	  gnome-sound-recorder              # Simple audio recordings
  	  gnome-system-monitor 	            # View current processes and monitor system state
     gnome-terminal 	                  # GNOME terminal
@@ -78,7 +75,7 @@ PACKAGES=(
     gvfs-goa                          # Virtual filesystem implementation for GIO (Gnome Online Accounts backend)
     gvfs-google                       # Virtual filesystem implementation for GIO (Google Drive backend)
     gvfs-gphoto2                      # Virtual filesystem implementation for GIO (PTP camera, MTP media player)
-    gvfs-mtp 	                        # Virtual filesystem implementation for GIO (MTP backend; Android, media player)
+    gvfs-mtp 	                        # Virtual filesystem implementation for GIO (MTP backend; Android media player)
     gvfs-nfs                          # Virtual filesystem implementation for GIO (NFS backend)
     gvfs-smb                          # Virtual filesystem implementation for GIO (SMB/CIFS backend)
     insync-nautilus                   # Nautilus extension and icons for integrating inSync
