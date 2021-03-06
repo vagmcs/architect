@@ -257,7 +257,7 @@ if ! grep -q builder /etc/passwd && ! grep -q archiso /etc/hostname; then
     echo 'Defaults insults'
     echo 'Defaults visiblepw'
     echo 'Defaults passprompt="[sudo] password for %u: "'
-    echo 'Defaults editor=/usr/bin/vim:/usr/bin/vi:/usr/bin/nano'
+    echo 'Defaults editor=/usr/bin/nvim:/usr/bin/vim:/usr/bin/vi:/usr/bin/nano'
     echo 'Defaults logfile =/var/log/sudo.log, log_year, log_host, syslog=auth'
   } >>/etc/sudoers
 
