@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+AUR_helper=paru
 SPIN="/-\|"
 Bold=$(tput bold)
 Reset=$(tput sgr0)
@@ -125,7 +126,7 @@ package_install() {
       _pkg_repo="${Bold}${Cyan}${_pkg_repo}${Reset}"
       ;;
     *)
-      if [[ $(su - "builder" -c "yay -Ss ${PKG}" 2>/dev/null | grep aur) != "" ]]; then
+      if [[ $(su - "builder" -c "${AUR_helper} -Ss ${PKG}" 2>/dev/null | grep aur) != "" ]]; then
         _pkg_repo="${Bold}${Purple}aur${Reset}"
       else
         _pkg_repo="${Bold}${Purple}unknown${Reset}"
@@ -135,7 +136,7 @@ package_install() {
     if ! is_package_installed "${PKG}"; then
       echo -ne " Installing (${_pkg_repo}) ${Bold}${PKG}${Reset} "
       if [[ "${_pkg_repo}" == "${Bold}${Purple}aur${Reset}" ]]; then
-        su - "builder" -c "yay -S --noconfirm ${PKG}" >/dev/null 2>&1 &
+        su - "builder" -c "${AUR_helper} -S --noconfirm ${PKG}" >/dev/null 2>&1 &
       else
         pacman -S --noconfirm --needed "${PKG}" >/dev/null 2>&1 &
       fi
@@ -269,22 +270,22 @@ if ! grep -q builder /etc/passwd && ! grep -q archiso /etc/hostname; then
   echo "builder ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers
 
   echo
-  echo "# INSTALLING YAY - https://wiki.archlinux.org/index.php/AUR_helpers"
+  echo "# INSTALLING ${AUR_helper^^} - https://wiki.archlinux.org/index.php/AUR_helpers"
   echo
 
   # exec command as builder instead of a root
-  pacman -D --asdeps go
+  # pacman -D --asdeps go
   su - builder -c "
     [[ ! -d aur_packages ]] && mkdir aur_packages
     cd aur_packages
-    curl -o yay.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz
-    tar zxvf yay.tar.gz
-    rm yay.tar.gz
-    cd yay
+    curl -o ${AUR_helper}.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/${AUR_helper}.tar.gz
+    tar zxf ${AUR_helper}.tar.gz
+    rm ${AUR_helper}.tar.gz
+    cd ${AUR_helper}
     makepkg -csi --noconfirm
   "
-  if ! is_package_installed "yay"; then
-    error_msg "yay installation failed!"
+  if ! is_package_installed "${AUR_helper}"; then
+    error_msg "${AUR_helper} installation failed!"
   fi
   read -er -p "Press enter to continue..."
   clear
