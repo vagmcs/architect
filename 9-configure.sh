@@ -122,6 +122,12 @@ git clone https://github.com/vagmcs/PRML /home/${USERNAME}/Work/dev/PRML
 git clone https://github.com/vagmcs/architect /home/${USERNAME}/Work/dev/architect
 "
 
+# Install Z-PLUG plugin manager for ZSH
+su - "${USERNAME}" -c "
+git clone https://github.com/zplug/zplug ${ZPLUG_HOME}
+chsh -s $(which zsh)
+"
+
 # Install VIM plugin manager
 curl -fLo /home/"${USERNAME}"/.config/nvim/autoload/plug.vim --create-dirs \
      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -129,9 +135,6 @@ curl -fLo /home/"${USERNAME}"/.config/nvim/autoload/plug.vim --create-dirs \
 # Globally install VIM essentials
 pip install pynvim
 npm i -g neovim
-
-# Create tmux symbolic link
-ln -sf /home/"${USERNAME}"/dev/dotfiles/.tmux/.tmux.conf /home/"${USERNAME}"/.tmux.conf
 
 # Install Ammonite
 curl -L https://github.com/lihaoyi/ammonite/releases/download/2.3.8/2.13-2.3.8-bootstrap > \
