@@ -38,18 +38,17 @@ chown -R "${USERNAME}":users /home/"${USERNAME}"
 read -er -p "Press enter to continue..."
 clear
 
-
 echo
 echo "# SYSTEM CONFIGURATION"
 echo
 
-echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.conf && sysctl --system >/dev/null
+echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.conf && sysctl --system > /dev/null
 
 # Clean packages
 pacman -Rsc --noconfirm "$(pacman -Qqdt)"
 
 # Delete the builder user and restore the sudoers configuration
-userdel builder && rm -r /home/builder
+killall -u builder && userdel -rf builder
 sed -i '$d' /etc/sudoers
 
 # Use terminus font for console
@@ -63,7 +62,6 @@ fi
 
 read -er -p "Press enter to continue..."
 clear
-
 
 echo
 echo "# USER ENVIRONMENT CONFIGURATION"
@@ -86,7 +84,7 @@ su - "${USERNAME}" -c "
 
 # Download Java, Scala and SBT
 su - "${USERNAME}" -c "
-wget https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u275-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
+wget -q --show-progress https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u275-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
 tar -zxf OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
 mv jdk8u275-b01 /home/${USERNAME}/.local/opt
 ln -sf /home/${USERNAME}/.local/opt/jdk8u275-b01 /home/${USERNAME}/.local/opt/java
@@ -94,7 +92,7 @@ rm -rf OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
 "
 
 su - "${USERNAME}" -c "
-wget https://downloads.lightbend.com/scala/2.13.4/scala-2.13.4.tgz
+wget -q --show-progress https://downloads.lightbend.com/scala/2.13.4/scala-2.13.4.tgz
 tar -zxf scala-2.13.4.tgz
 mv scala-2.13.4 /home/${USERNAME}/.local/opt
 ln -sf /home/${USERNAME}/.local/opt/scala-2.13.4 /home/${USERNAME}/.local/opt/scala
@@ -102,7 +100,7 @@ rm -rf scala-2.13.4.tgz
 "
 
 su - "${USERNAME}" -c "
-wget https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.tgz
+wget -q --show-progress https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.tgz
 tar -zxf sbt-1.4.5.tgz
 mv sbt /home/${USERNAME}/.local/opt/sbt-1.4.5
 ln -sf /home/${USERNAME}/.local/opt/sbt-1.4.5 /home/${USERNAME}/.local/opt/sbt
@@ -124,21 +122,25 @@ git clone https://github.com/vagmcs/architect /home/${USERNAME}/Work/dev/archite
 
 # Install Z-PLUG plugin manager for ZSH
 su - "${USERNAME}" -c "
-git clone https://github.com/zplug/zplug ${ZPLUG_HOME}
+git clone https://github.com/zplug/zplug /home/${USERNAME}/.local/share/.zplug
 chsh -s $(which zsh)
 "
 
 # Install VIM plugin manager
-curl -fLo /home/"${USERNAME}"/.config/nvim/autoload/plug.vim --create-dirs \
+su - "${USERNAME}" -c "
+curl -fLo /home/${USERNAME}/.config/nvim/autoload/plug.vim --create-dirs \
      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"
 
 # Globally install VIM essentials
 pip install pynvim
 npm i -g neovim
 
 # Install Ammonite
+su - "${USERNAME}" -c "
 curl -L https://github.com/lihaoyi/ammonite/releases/download/2.3.8/2.13-2.3.8-bootstrap > \
-     /home/"${USERNAME}"/.local/bin/amm && chmod +x /home/"${USERNAME}"/.local/bin/amm
+     /home/${USERNAME}/.local/bin/amm && chmod +x /home/${USERNAME}/.local/bin/amm
+"
 
 # Cleanup
 rm /home/"${USERNAME}"/.bash_logout

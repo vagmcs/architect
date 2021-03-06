@@ -274,7 +274,6 @@ if ! grep -q builder /etc/passwd && ! grep -q archiso /etc/hostname; then
   echo
 
   # exec command as builder instead of a root
-  # pacman -D --asdeps go
   su - builder -c "
     [[ ! -d aur_packages ]] && mkdir aur_packages
     cd aur_packages
