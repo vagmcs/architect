@@ -57,7 +57,7 @@ echo "FONT=ter-v32b" > /etc/vconsole.conf
 
 # Enable pacman colors and fancy progress bar
 read_input_text "Do you need to enable edit pacman.conf (e.g. enable colors and ILoveCandy)"
-if [[ "${OPTION}" == y ]]; then # set console font and keymap
+if [[ "${OPTION}" == y ]]; then
   nvim /etc/pacman.conf
 fi
 
@@ -73,43 +73,54 @@ echo
 su - "${USERNAME}" -c "
   mkdir -p .local/bin
   mkdir -p .local/opt
+  mkdir -p .local/share
   mkdir -p Work/dev
 "
 
 # Download dotfiles and checkout
-git clone --bare https://github.com/vagmcs/dotfiles /home/"${USERNAME}"/Work/dev/dotfiles
 su - "${USERNAME}" -c "
+  git clone --bare https://github.com/vagmcs/dotfiles /home/${USERNAME}/Work/dev/dotfiles
   git --git-dir=Work/dev/dotfiles --work-tree=. reset --hard HEAD
-  config config --local status.showUntrackedFiles no
+  git --git-dir=Work/dev/dotfiles --work-tree=. config --local status.showUntrackedFiles no
 "
 
 # Download Java, Scala and SBT
+su - "${USERNAME}" -c "
 wget https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u275-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
 tar -zxf OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
-mv jdk8u275-b01 /home/"${USERNAME}"/.local/opt
-ln -sf /home/"${USERNAME}"/.local/opt/jdk8u275-b01 /home/"${USERNAME}"/.local/opt/java
+mv jdk8u275-b01 /home/${USERNAME}/.local/opt
+ln -sf /home/${USERNAME}/.local/opt/jdk8u275-b01 /home/${USERNAME}/.local/opt/java
 rm -rf OpenJDK8U-jdk_x64_linux_hotspot_8u275b01.tar.gz
+"
 
+su - "${USERNAME}" -c "
 wget https://downloads.lightbend.com/scala/2.13.4/scala-2.13.4.tgz
 tar -zxf scala-2.13.4.tgz
-mv scala-2.13.4 /home/"${USERNAME}"/.local/opt
-ln -sf /home/"${USERNAME}"/.local/opt/scala-2.13.4 /home/"${USERNAME}"/.local/opt/scala
+mv scala-2.13.4 /home/${USERNAME}/.local/opt
+ln -sf /home/${USERNAME}/.local/opt/scala-2.13.4 /home/${USERNAME}/.local/opt/scala
 rm -rf scala-2.13.4.tgz
+"
 
+su - "${USERNAME}" -c "
 wget https://github.com/sbt/sbt/releases/download/v1.4.5/sbt-1.4.5.tgz
 tar -zxf sbt-1.4.5.tgz
-mv sbt /home/"${USERNAME}"/.local/opt/sbt-1.4.5
-ln -sf /home/"${USERNAME}"/.local/opt/sbt-1.4.5 /home/"${USERNAME}"/.local/opt/sbt
+mv sbt /home/${USERNAME}/.local/opt/sbt-1.4.5
+ln -sf /home/${USERNAME}/.local/opt/sbt-1.4.5 /home/${USERNAME}/.local/opt/sbt
 rm -rf sbt-1.4.5.tgz
+"
 
 # Download wallpapers
-git clone https://github.com/vagmcs/wallpapers /home/"${USERNAME}"/Pictures/wallpapers
+su - "${USERNAME}" -c "
+git clone https://github.com/vagmcs/wallpapers /home/${USERNAME}/Pictures/wallpapers
+"
 
 # Download personal projects
-git clone https://github.com/vagmcs/ScalaTIKZ /home/"${USERNAME}"/Work/dev/ScalaTIKZ
-git clone https://github.com/vagmcs/Optimus /home/"${USERNAME}"/Work/dev/Optimus
-git clone https://github.com/vagmcs/PRML /home/"${USERNAME}"/Work/dev/PRML
-git clone https://github.com/vagmcs/architect /home/"${USERNAME}"/Work/dev/architect
+su - "${USERNAME}" -c "
+git clone https://github.com/vagmcs/ScalaTIKZ /home/${USERNAME}/Work/dev/ScalaTIKZ
+git clone https://github.com/vagmcs/Optimus /home/${USERNAME}/Work/dev/Optimus
+git clone https://github.com/vagmcs/PRML /home/${USERNAME}/Work/dev/PRML
+git clone https://github.com/vagmcs/architect /home/${USERNAME}/Work/dev/architect
+"
 
 # Install VIM plugin manager
 curl -fLo /home/"${USERNAME}"/.config/nvim/autoload/plug.vim --create-dirs \
