@@ -29,19 +29,35 @@ PACKAGES=(
     #
     # General
     #
+    dunst                             # Notification helper
+    dmenu                             # Generic menu for X
+    lightdm                           # A lightweight display manager
+    network-manager-applet            # Applet for managing network connections
+    picom                             # Compositor (shadows and transparency)
+    polkit-gnome                      # Legacy authentication agent for GNOME
+    polybar                           # A fast and easy-to-use status bar
+    rofi                              # A window switcher and application launcher
+    xautolock                         # An automatic X screen-locker/screen-saver
     xdg-user-dirs-gtk                 # Creates user dirs
+    i3lock-fancy
+
+    #
+    # BSP WM
+    #
+    bwpwm
+    sxhkd
+
+    #
+    # i3-gaps
+    #
+    i3-gaps
+    i3status
 
     #
     # QTile
     #
-    lightdm
-    qtile
-    picom         # Compositor (shadows and transparency)
-    python-psutil
-    rofi
-    dunst         # Notification helper
-    dmenu
-    polkit-gnome
+    python-psutil                     # A cross-platform process and system utilities module for Python
+    qtile                             # A full-featured, pure-Python tiling window manager
 
     #
     # GNOME (MINIMAL)
