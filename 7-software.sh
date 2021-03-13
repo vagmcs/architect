@@ -79,6 +79,7 @@ PACKAGES=(
     wget                      # Remote content retrieval
     xclip                     # Command line interface to the X11 clipboard
     xsel                      # Command line program for copy and paste operations.
+    xwallpaper                # Wallpaper utility for X
     zip                       # Zip compression program
     zsh                       # ZSH shell
     zsh-completions           # Tab completion for ZSH
