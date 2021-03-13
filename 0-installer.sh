@@ -170,7 +170,7 @@ create_partition_scheme() {
   echo
   PS3="${PROMPT_1}"
   echo -e "Select partition scheme:\n"
-  select OPT in "Simple" "Custom [LVM, RAID, LUKS]" "Maintain Current"; do
+  select OPT in "Simple" "Custom [LVM, RAID, LUKS]"; do
     partition_layout="${OPT}"
     case "${REPLY}" in
     1)
@@ -184,12 +184,6 @@ create_partition_scheme() {
       [[ -z "${check_lvm}" ]] && LVM=1
       check_luks=$(blkid | grep LUKS)
       [[ -z "${check_luks}" ]] && LUKS=1
-      ;;
-    3)
-      # enable device mapper and scan for LVM block devices
-      modprobe dm-mod
-      vgscan &>/dev/null
-      vgchange -ay &>/dev/null
       ;;
     *)
       echo "Invalid option. Try another one."
