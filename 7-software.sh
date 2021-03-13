@@ -128,6 +128,7 @@ PACKAGES=(
     pyenv                     # Manage Python versions
     python                    # Python language
     python-pip                # PyPA tool for installing Python packages
+    rustup                    # The Rust toolchain installer
 
     # MEDIA ---------------------------------------------------------------
 
