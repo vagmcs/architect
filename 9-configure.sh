@@ -44,9 +44,6 @@ echo
 
 echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.conf && sysctl --system > /dev/null
 
-# Clean packages
-pacman -Rsc --noconfirm "$(pacman -Qqdt)"
-
 # Delete the builder user and restore the sudoers configuration
 killall -u builder && userdel -rf builder
 sed -i '$d' /etc/sudoers
@@ -77,9 +74,9 @@ su - "${USERNAME}" -c "
 
 # Download dotfiles and checkout
 su - "${USERNAME}" -c "
-  git clone --bare https://github.com/vagmcs/dotfiles /home/${USERNAME}/Work/dev/dotfiles
-  git --git-dir=Work/dev/dotfiles --work-tree=. reset --hard HEAD
-  git --git-dir=Work/dev/dotfiles --work-tree=. config --local status.showUntrackedFiles no
+  git clone --bare https://github.com/vagmcs/dots /home/${USERNAME}/Work/dev/dots
+  git --git-dir=Work/dev/dots --work-tree=. reset --hard HEAD
+  git --git-dir=Work/dev/dots --work-tree=. config --local status.showUntrackedFiles no
 "
 
 # Download Java, Scala and SBT

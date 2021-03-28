@@ -228,7 +228,6 @@ if ! grep -q builder /etc/passwd && ! grep -q archiso /etc/hostname; then
     sed -i '/\[multilib\]/{n;s/^#//g}' /etc/pacman.conf
   fi
   pacman -Sy
-  read -er -p "Press enter to continue..."
   clear
 
   # Update pacman keys

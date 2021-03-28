@@ -39,16 +39,21 @@ PACKAGES=(
     bashtop                   # Resource monitor
     bat                       # Cat clone having syntax highlighting
     bc                        # Precision calculator language
+    clipmenu                  # Clipboard management
     cmus                      # Very feature-rich ncurses-based music player
     cpio                      # Copy files into or out of an archive
+    cronie                    # Daemon that runs programs at scheduled times
     curl                      # Remote content retrieval
     emacs                     # EMACS editor
     exa                       # ls replacement
+    ffmpeg                    # Record, convert and stream audio and video
     figlet                    # ASCII art from ordinary text
     fzf                       # Fuzzy finder
     gnupg                     # OpenPGP standard
     htop                      # Resource monitor
     inetutils                 # A collection of common network programs
+    pandoc                    # Conversion between markup formats
+    pass                      # Stores, retrieves, generates, and synchronizes passwords
     p7zip                     # 7zip compression program
     pdftk                     # PDF tools
     pkgfile                   # a pacman .files metadata explorer
@@ -69,7 +74,10 @@ PACKAGES=(
     ntp                       # Network Time Protocol to set time via network
     openssh                   # SSH connectivity tools
     rsync                     # Remote file sync utility
+    sc-im                     # A spreadsheet program based on SC
+    shellcheck                # Shell script analysis tool
     speedtest-cli             # Internet speed via terminal
+    tdrop                     # A WM-independent dropdown window creator
     tmux                      # Terminal multiplexer
     trash-cli                 # Command line trashcan interface
     ueberzug                  # Command line util that displays images in X11
@@ -78,7 +86,7 @@ PACKAGES=(
     unzip                     # Zip compression program
     wget                      # Remote content retrieval
     xclip                     # Command line interface to the X11 clipboard
-    xsel                      # Command line program for copy and paste operations.
+    xsel                      # Command line program for copy and paste operations
     xwallpaper                # Wallpaper utility for X
     zip                       # Zip compression program
     zsh                       # ZSH shell
@@ -94,6 +102,7 @@ PACKAGES=(
     texlive-most              # TeX Live distribution
     texlive-langgreek         # TeX Live Greek language support
     zathura                   # Minimalistic document viewer
+    zathura-djvu              # DjVu support
     zathura-pdf-poppler       # PDF using the poppler engine
     zathura-ps                # PS support using the spectre library
     zotero                    # A tool to collect, organize, cite, and share research sources
@@ -106,9 +115,9 @@ PACKAGES=(
     exfatprogs                # exFAT filesystem tools for the Linux Kernel driver
     ntfs-3g                   # Open source implementation of NTFS file system
     usbutils                  # USB tools to query connected USB devices
-    gptfdisk                  # A text-mode partitioning tool that works on GUID Partition Table (GPT) disks
+    gptfdisk                  # A text-mode partitioning tool for GUID Partition Table (GPT) disks
 
-    # BACKUP
+    # BACKUP --------------------------------------------------------------
 
     deja-dup                  # Simple backup tool
     timeshift                 # System restore utility
@@ -143,6 +152,7 @@ PACKAGES=(
 
     # INTERNET AND CLOUD --------------------------------------------------
 
+    brave-bin                 # Web browser that blocks ads and trackers by default
     firefox                   # Standalone web browser
     insync                    # A Google Drive and OneDrive client
     owncloud-client           # ownCloud client
