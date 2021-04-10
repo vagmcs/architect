@@ -44,6 +44,7 @@ PACKAGES=(
     cpio                      # Copy files into or out of an archive
     cronie                    # Daemon that runs programs at scheduled times
     curl                      # Remote content retrieval
+    duf                       # Disk usage/free utility
     emacs                     # EMACS editor
     exa                       # ls replacement
     ffmpeg                    # Record, convert and stream audio and video
@@ -71,6 +72,7 @@ PACKAGES=(
     neofetch                  # Shows system info when you launch terminal
     neomutt                   # Command line mail reader
     neovim                    # Neovim editor
+    nnn                       # The fastest terminal file manager
     ntp                       # Network Time Protocol to set time via network
     openssh                   # SSH connectivity tools
     rsync                     # Remote file sync utility

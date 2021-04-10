@@ -1,10 +1,10 @@
 # Architect: Arch Linux Installation Scripts
 
-This README contains the steps I do to install and configure a fully-functional Arch Linux installation containing a desktop environment, all the support packages (network, bluetooth, audio, printers, etc.), my preferred applications and utilities. The shell scripts in this repo allow for the entire process to be automated.
+This README contains the steps I do to install and configure a fully-functional Arch Linux installation including a desktop environment, support packages (networking, bluetooth, audio, printers, etc.), my preferred applications and tools. The shell scripts in this repo allow for the entire process to be automated.
 
 Installing an Arch system from scratch is time-consuming, and I am pretty lazy. My goal in developing these scripts was to learn more about Arch linux and to be able to go from a blank hard drive to a fully functional Arch system as fast as possible.
 
-Some of these scripts include alternative listings of packages and certainly there no need to install everything. Moreover, package choices and configuration are specific to my needs. Thus, please **do not just run these scripts.** Examine them. Customize them and create your own versions.
+Some of these scripts include alternative listings of packages and certainly there is no need to install everything. Moreover, package choices and configuration are specific to my needs. Thus, please **do not just run these scripts.** Examine them. Customize them and create your own versions.
 
 Happy hacking!
 
@@ -32,4 +32,4 @@ Boot into the installed system, **connect to the network** and run the following
 
 Congratulations!
 
-You should now have an Arch system running all the base packages that allow network connectivity, bluetooth, printers, etc., and a curated selection of applications.
+You should now have an Arch Linux system running all the base packages that allow network connectivity, bluetooth, printers, etc., and a curated selection of applications.
