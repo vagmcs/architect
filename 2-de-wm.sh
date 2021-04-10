@@ -27,37 +27,21 @@ echo
 PACKAGES=(
 
     #
-    # General
+    # BSP WM
     #
-    dunst                             # Notification helper
+    bspwm                             # Tiling window manager based on binary space partitioning
     dmenu                             # Generic menu for X
-    lightdm                           # A lightweight display manager
+    dunst                             # Notification helper
+    i3lock-fancy                      # i3lock-color script
+    nm-connection-editor              # NetworkManager GUI connection editor
     network-manager-applet            # Applet for managing network connections
     picom                             # Compositor (shadows and transparency)
     polkit-gnome                      # Legacy authentication agent for GNOME
     polybar                           # A fast and easy-to-use status bar
     rofi                              # A window switcher and application launcher
+    sxhkd                             # Simple X hotkey daemon
     xautolock                         # An automatic X screen-locker/screen-saver
     xdg-user-dirs-gtk                 # Creates user dirs
-    i3lock-fancy
-
-    #
-    # BSP WM
-    #
-    bwpwm
-    sxhkd
-
-    #
-    # i3-gaps
-    #
-    i3-gaps
-    i3status
-
-    #
-    # QTile
-    #
-    python-psutil                     # A cross-platform process and system utilities module for Python
-    qtile                             # A full-featured, pure-Python tiling window manager
 
     #
     # GNOME (MINIMAL)
@@ -73,13 +57,12 @@ PACKAGES=(
     gnome-color-manager               # GNOME Color Profile Tools
     gnome-control-center              # GNOME main interface to configure various aspects of the desktop
     gnome-disk-utility 	              # Disk Management for GNOME
+    gnome-keyring                     # Stores passwords and encryption keys
     gnome-screenshot                  # Take pictures of your screen
     gnome-session 	                  # The GNOME Session Handler
     gnome-settings-daemon 	          # GNOME Settings Daemon
     gnome-shell 	                    # Next generation desktop shell
     gnome-shell-extensions            # Extensions for GNOME shell, including classic mode
- 	  gnome-sound-recorder              # Simple audio recordings
- 	  gnome-system-monitor 	            # View current processes and monitor system state
     gnome-terminal 	                  # GNOME terminal
     gnome-tweaks                      # Graphical interface for advanced GNOME 3 settings
  	  gnome-user-share 	                # Easy to use user-level file sharing for GNOME
@@ -97,61 +80,10 @@ PACKAGES=(
     nautilus-sendto                   # Easily send files via mail
     nautilus-share                    # Nautilus extension to share folder using Samba
     nautilus-image-converter          # Nautilus extension to rotate/resize image files
+    okular                            # KDE document viewer
     sushi                             # A quick previewer for Nautilus
     tracker3                          # Desktop-neutral user information store, search tool and indexer
     tracker3-miners 	                # Collection of data extractors for Tracker/Nepomuk
-
-    #
-    # KDE (MINIMAL)
-    #
-    ark                                # Archiving Tool
-    bluedevil 	                       # Integrate the Bluetooth technology within KDE workspace and applications
-    breeze 	                           # Artwork, styles and assets for the Breeze visual style for the Plasma Desktop
-    breeze-gtk 	                       # Breeze widget theme for GTK 2 and 3
-    dolphin                            # KDE File Manager
-    dolphin-plugins                    # Extra Dolphin plugins
-    drkonqi 	                         # KDE crash handler
-    ffmpegthumbs                       # FFmpeg-based thumbnail creator for video files
-    kactivitymanagerd 	               # System service to manage user's activities and track the usage patterns
-    kde-cli-tools 	                   # Tools based on KDE Frameworks 5 to better interact with the system
-    kdegraphics-thumbnailers           # Thumbnails for various graphics file formats
-    kde-gtk-config 	                   # GTK2 and GTK3 Configurator for KDE
-    kdecoration 	                     # Plugin based library to create window decorations
-    kdeplasma-addons                   # All kind of addons to improve your Plasma experience
-    kgamma5 	                         # Adjust your monitor's gamma settings
-    khotkeys 	                         # KHotKeys
-    kinfocenter 	                     # A utility that provides information about a computer system
-    kmenuedit 	                       # KDE menu editor
-    kscreen 	                         # KDE screen management software
-    kscreenlocker 	                   # Library and components for secure lock screen architecture
-    ksshaskpass 	                     # ssh-add helper that uses kwallet and kpassworddialog
-    ksysguard 	                       # Track and control the processes running in your system
-    kwallet-pam 	                     # KWallet PAM integration
-    kwayland-integration               # Provides integration plugins for various KDE frameworks for the wayland windowing system
-    kwayland-server 	                 # Wayland server components built on KDE Frameworks
-    kwin 	                             # An easy to use, but flexible, composited Window Manager
-    kwrited 	                         # KDE daemon listening for wall and write messages
-    libkscreen 	                       # KDE screen management software
-    libksysguard 	                     # Library to retrieve information on the current status of computer hardware
-    milou 	                           # A dedicated search application built on top of baloo
-    okular                             # Document Viewer
-    plasma-browser-integration 	       # Components necessary to integrate browsers into the Plasma Desktop
-    plasma-desktop 	                   # KDE Plasma Desktop
-    plasma-disks 	                     # Monitors S.M.A.R.T. capable devices for imminent failure
-    plasma-integration 	               # Qt Platform Theme integration plugins for the Plasma workspaces
-    plasma-nm 	                       # Plasma applet written in QML for managing network connections
-    plasma-pa                       	 # Plasma applet for audio volume management using PulseAudio
-    plasma-systemmonitor 	             # An interface for monitoring system sensors, process information and other system resources
-    plasma-thunderbolt 	               # Plasma integration for controlling Thunderbolt devices
-    plasma-vault 	                     # Plasma applet and services for creating encrypted vaults
-    plasma-workspace 	                 # KDE Plasma Workspace
-    plasma-workspace-wallpapers 	     # Additional wallpapers for the Plasma Workspace
-    polkit-kde-agent 	                 # Daemon providing a polkit authentication UI for KDE
-    powerdevil 	                       # Manages the power consumption settings of a Plasma Shell
-    print-manager                      # A tool for managing print jobs and printers
-    sddm-kcm 	                         # KDE Config Module for SDDM
-    systemsettings 	                   # KDE system manager for hardware, software, and workspaces
-    xdg-desktop-portal-kde 	           # A backend implementation for xdg-desktop-portal using Qt/KF5
 )
 
 for PKG in "${PACKAGES[@]}"; do
