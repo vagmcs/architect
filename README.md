@@ -1,4 +1,11 @@
-# Architect: Arch Linux Installation Scripts
+<h1 align="center">Architect</h1>
+
+<p align="center">
+<img alt="Maintenance" src="https://img.shields.io/maintenance/yes/2021?style=for-the-badge">
+<img alt="GitHub" src="https://img.shields.io/github/license/vagmcs/architect?color=blue&style=for-the-badge">
+</p>
+
+### Arch Linux Installation Scripts
 
 This README contains the steps I do to install and configure a fully-functional Arch Linux installation including a desktop environment, support packages (networking, bluetooth, audio, printers, etc.), my preferred applications and tools. The shell scripts in this repo allow for the entire process to be automated.
 
