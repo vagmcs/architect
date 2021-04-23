@@ -71,10 +71,12 @@ PACKAGES=(
     ncdu                      # Simple ncurses disk usage analyzer
     neofetch                  # Shows system info when you launch terminal
     neomutt                   # Command line mail reader
+    neovide                   # No nonsense Neovim client in Rust
     neovim                    # Neovim editor
     nnn                       # The fastest terminal file manager
     ntp                       # Network Time Protocol to set time via network
     openssh                   # SSH connectivity tools
+    reflector                 # A script to retrieve and filter pacman mirrors.
     rsync                     # Remote file sync utility
     sc-im                     # A spreadsheet program based on SC
     shellcheck                # Shell script analysis tool
@@ -87,6 +89,7 @@ PACKAGES=(
     unrar                     # RAR compression program
     unzip                     # Zip compression program
     wget                      # Remote content retrieval
+    xbindkeys                 # Run shell commands using keyboard or mouse under X
     xclip                     # Command line interface to the X11 clipboard
     xsel                      # Command line program for copy and paste operations
     xwallpaper                # Wallpaper utility for X
