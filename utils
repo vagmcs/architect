@@ -147,44 +147,6 @@ package_install() {
   done
 }
 #
-# Group package installer
-#
-group_package_install() {
-  for PKG in ${1}; do
-    # shellcheck disable=SC2155
-    local _pkg_repo=$(pacman -Sp --print-format %r "${PKG}" 2>/dev/null | uniq | sed '1!d')
-    case "${_pkg_repo}" in
-    core)
-      _pkg_repo="${Bold}${Red}${_pkg_repo}${Reset}"
-      ;;
-    extra)
-      _pkg_repo="${Bold}${Yellow}${_pkg_repo}${Reset}"
-      ;;
-    community)
-      _pkg_repo="${Bold}${Green}${_pkg_repo}${Reset}"
-      ;;
-    multilib)
-      _pkg_repo="${Bold}${Cyan}${_pkg_repo}${Reset}"
-      ;;
-    *)
-      _pkg_repo="${Bold}${Purple}unknown${Reset}"
-      ;;
-    esac
-    # shellcheck disable=SC2207
-    local packages=($(pacman -S -g "${PKG}" | awk '{print $2}' | tr '\n' ' '))
-    for i in "${!packages[@]}"; do
-      printf "%s) %s" "$i" "${packages[$i]}"
-    done
-    echo ""
-    read_input_text "Select packages"
-    for OPT in "${OPTIONS[@]}"; do
-      echo -ne " Installing (${_pkg_repo}) ${Bold}${packages[$OPT]}${Reset} "
-      pacman -S --needed "${packages[$OPT]}" >/dev/null 2>&1 &
-      pid=$! && progress $pid
-    done
-  done
-}
-#
 # System control
 #
 system_ctl() {
