@@ -40,6 +40,7 @@ PACKAGES=(
     polybar                           # A fast and easy-to-use status bar
     rofi                              # A window switcher and application launcher
     sxhkd                             # Simple X hotkey daemon
+    system-config-printer             # A CUPS printer configuration tool and status applet
     xautolock                         # An automatic X screen-locker/screen-saver
     xdg-user-dirs-gtk                 # Creates user dirs
 

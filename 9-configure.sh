@@ -45,14 +45,15 @@ echo
 echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.conf && sysctl --system > /dev/null
 
 # Delete the builder user and restore the sudoers configuration
-killall -u builder && userdel -rf builder
+killall -u builder
+userdel -rf builder
 sed -i '$d' /etc/sudoers
 
 # Use terminus font for console
 echo "FONT=ter-v32b" > /etc/vconsole.conf
 
 # Enable pacman colors and fancy progress bar
-read_input_text "Do you need to enable edit pacman.conf (e.g. enable colors and ILoveCandy)"
+read_input_text "Do you need to edit pacman.conf (e.g. enable colors and ILoveCandy)"
 if [[ "${OPTION}" == y ]]; then
   nvim /etc/pacman.conf
 fi

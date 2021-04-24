@@ -60,8 +60,10 @@ PACKAGES=(
     pkgfile                   # a pacman .files metadata explorer
     prettyping                # A colorful ping wrapper
     pydf                      # A colorized df clone
+    python-psutil             # Process and system utilities module for Python
     python-pywal              # Generate colorschemes on the fly
     jq                        # JSON parsing library
+    lazygit                   # Simple terminal UI for git commands
     lhasa                     # lhasa compression algorithm
     lpsolve                   # Mixed Integer Linear Programming solver
     lrzip                     # Compression algorithm
