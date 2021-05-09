@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-source utils && clear
+source globals && clear
 
 echo
 echo "# INSTALLING PRINTER DRIVERS - https://wiki.archlinux.org/index.php/Cups"
