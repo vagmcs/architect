@@ -63,8 +63,8 @@ PACKAGES=(
     gnome-shell 	                    # Next generation desktop shell
     gnome-shell-extensions            # Extensions for GNOME shell, including classic mode
     gnome-tweaks                      # Graphical interface for advanced GNOME 3 settings
- 	  gnome-user-share 	                # Easy to use user-level file sharing for GNOME
- 	  gvfs-goa                          # Virtual filesystem implementation for GIO (Gnome Online Accounts backend)
+    gnome-user-share                  # Easy to use user-level file sharing for GNOME
+    gvfs-goa                          # Virtual filesystem implementation for GIO (Gnome Online Accounts backend)
     gvfs-google                       # Virtual filesystem implementation for GIO (Google Drive backend)
     mutter                            # GNOME window manager
 )

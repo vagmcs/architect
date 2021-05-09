@@ -95,7 +95,7 @@ select_keymap() {
 configure_mirror_list() {
 
   # shellcheck disable=SC2207
-  countries_name=($(reflector --list-countries | awk '{if (NR>2) print $1}'))
+  countries_name=($(reflector --list-countries | awk -F'[[:space:]][[:space:]]' '{if (NR>2) print $1}'))
 
   country_list() {
     PS3="${PROMPT_1}"
