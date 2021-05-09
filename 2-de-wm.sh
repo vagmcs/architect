@@ -33,58 +33,40 @@ PACKAGES=(
     dmenu                             # Generic menu for X
     dunst                             # Notification helper
     i3lock-fancy                      # i3lock-color script
+    lxappearance-gtk3                 # GTK+ theme changer
+    lxrandr-gtk3                      # Monitor configuration tool
+    mictray                           # System tray to control the microphone state and volume
     nm-connection-editor              # NetworkManager GUI connection editor
     network-manager-applet            # Applet for managing network connections
+    pavucontrol                       # PulseAudio Volume Control
     picom                             # Compositor (shadows and transparency)
     polkit-gnome                      # Legacy authentication agent for GNOME
     polybar                           # A fast and easy-to-use status bar
     rofi                              # A window switcher and application launcher
     sxhkd                             # Simple X hotkey daemon
     system-config-printer             # A CUPS printer configuration tool and status applet
+    volctl                            # Volume control and OSD
     xautolock                         # An automatic X screen-locker/screen-saver
     xdg-user-dirs-gtk                 # Creates user dirs
 
     #
     # GNOME (MINIMAL)
     #
-    baobab                            # A graphical directory tree analyzer
     dconf-editor                      # Configuration editor
-    eog 	                            # Eye of Gnome: An image viewer
-    evince                            # Document viewer (PDF, PostScript, XPS, djvu, dvi, tiff, cbr, cbz, cb7, cbt)
-    file-roller                       # Create and modify archives
     gdm                               # Display manager and login screen
-    gnome-calculator                  # GNOME calculator
-    gnome-characters                  # A character map application
     gnome-color-manager               # GNOME Color Profile Tools
     gnome-control-center              # GNOME main interface to configure various aspects of the desktop
     gnome-disk-utility 	              # Disk Management for GNOME
     gnome-keyring                     # Stores passwords and encryption keys
-    gnome-screenshot                  # Take pictures of your screen
     gnome-session 	                  # The GNOME Session Handler
     gnome-settings-daemon 	          # GNOME Settings Daemon
     gnome-shell 	                    # Next generation desktop shell
     gnome-shell-extensions            # Extensions for GNOME shell, including classic mode
-    gnome-terminal 	                  # GNOME terminal
     gnome-tweaks                      # Graphical interface for advanced GNOME 3 settings
  	  gnome-user-share 	                # Easy to use user-level file sharing for GNOME
-    gvfs                              #	Virtual filesystem implementation for GIO
-    gvfs-afc                          # Virtual filesystem implementation for GIO (AFC backend; Apple mobile devices)
-    gvfs-goa                          # Virtual filesystem implementation for GIO (Gnome Online Accounts backend)
+ 	  gvfs-goa                          # Virtual filesystem implementation for GIO (Gnome Online Accounts backend)
     gvfs-google                       # Virtual filesystem implementation for GIO (Google Drive backend)
-    gvfs-gphoto2                      # Virtual filesystem implementation for GIO (PTP camera, MTP media player)
-    gvfs-mtp 	                        # Virtual filesystem implementation for GIO (MTP backend; Android media player)
-    gvfs-nfs                          # Virtual filesystem implementation for GIO (NFS backend)
-    gvfs-smb                          # Virtual filesystem implementation for GIO (SMB/CIFS backend)
-    insync-nautilus                   # Nautilus extension and icons for integrating inSync
     mutter                            # GNOME window manager
-    nautilus                          # GNOME file manager
-    nautilus-sendto                   # Easily send files via mail
-    nautilus-share                    # Nautilus extension to share folder using Samba
-    nautilus-image-converter          # Nautilus extension to rotate/resize image files
-    okular                            # KDE document viewer
-    sushi                             # A quick previewer for Nautilus
-    tracker3                          # Desktop-neutral user information store, search tool and indexer
-    tracker3-miners 	                # Collection of data extractors for Tracker/Nepomuk
 )
 
 for PKG in "${PACKAGES[@]}"; do

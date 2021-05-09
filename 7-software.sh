@@ -28,9 +28,12 @@ PACKAGES=(
 
     # SYSTEM --------------------------------------------------------------
 
+    flatpak                   # Linux application distribution framework
+    gnome-calculator          # GNOME calculator
+    gnome-screenshot          # Take pictures of your screen
     linux-lts                 # Long term support kernel
     pamac-aur                 # Standalone GTK3 package manager
-    lxappearance-gtk3         # GTK+ theme changer
+    qt5-base                  # A cross-platform application and UI framework
 
     # TERMINAL UTILITIES --------------------------------------------------
 
@@ -91,6 +94,7 @@ PACKAGES=(
     unrar                     # RAR compression program
     unzip                     # Zip compression program
     wget                      # Remote content retrieval
+    wmname                    # A program to set the WM name and help JVM apps to behave as expected
     xbindkeys                 # Run shell commands using keyboard or mouse under X
     xclip                     # Command line interface to the X11 clipboard
     xsel                      # Command line program for copy and paste operations
@@ -101,10 +105,37 @@ PACKAGES=(
     zsh-syntax-highlighting   # Fish shell like syntax highlighting for Zsh
     zsh-autosuggestions       # zsh-autosuggestions
 
+    # FILE MANAGER --------------------------------------------------------
+
+    ffmpegthumbnailer         # Lightweight video thumbnail creator
+    file-roller               # Create and modify archives
+    gnome-epub-thumbnailer    # Thumbnail creator for EPub and MOBI books
+    gvfs                      #	Virtual filesystem implementation for GIO
+    gvfs-afc                  # Virtual filesystem implementation for GIO (AFC backend; Apple mobile devices)
+    gvfs-gphoto2              # Virtual filesystem implementation for GIO (PTP camera, MTP media player)
+    gvfs-mtp 	                # Virtual filesystem implementation for GIO (MTP backend; Android media player)
+    gvfs-nfs                  # Virtual filesystem implementation for GIO (NFS backend)
+    gvfs-smb                  # Virtual filesystem implementation for GIO (SMB/CIFS backend)
+    insync-nautilus           # Nautilus extension and icons for integrating inSync
+    nautilus                  # GNOME file manager
+    nautilus-sendto           # Easily send files via mail
+    nautilus-share            # Nautilus extension to share folder using Samba
+    nautilus-image-converter  # Nautilus extension to rotate/resize image files
+    sushi                     # A quick previewer for Nautilus
+    tracker3                  # Desktop-neutral user information store, search tool and indexer
+    tracker3-miners 	        # Collection of data extractors for Tracker/Nepomuk
+    tumbler                   # D-Bus service for applications to request thumbnails
+    ufraw-thumbnailer         # Thumbnail generator for RAW images
+
     # DOCUMENTS -----------------------------------------------------------
 
-    pdfgrep                   # Tool to search text in PDF files
+    aspell-el                 # Greek dictionary for aspell
+    aspell-en                 # English dictionary for aspell
+    evince                    # Document viewer (PDF, PostScript, XPS, djvu, dvi, tiff, cbr, cbz, cb7, cbt)
+    setzer                    # A GTK-Python LaTeX editor
     foliate                   # Simple and modern GTK eBook reader
+    pdfgrep                   # Tool to search text in PDF files
+    spice-up                  # Create simple and beautiful presentations
     texlive-bin               # TeX Live binaries
     texlive-most              # TeX Live distribution
     texlive-langgreek         # TeX Live Greek language support
@@ -117,12 +148,13 @@ PACKAGES=(
     # DISK UTILITIES ------------------------------------------------------
 
     autofs                    # Auto-mounter
-    e2fsprogs                 # Ext2/3/4 filesystem tools
     dosfstools                # DOS filesystem tools
+    e2fsprogs                 # Ext2/3/4 filesystem tools
     exfatprogs                # exFAT filesystem tools for the Linux Kernel driver
-    ntfs-3g                   # Open source implementation of NTFS file system
-    usbutils                  # USB tools to query connected USB devices
     gptfdisk                  # A text-mode partitioning tool for GUID Partition Table (GPT) disks
+    ntfs-3g                   # Open source implementation of NTFS file system
+    sshfs                     # FUSE client based on the SSH File Transfer Protocol
+    usbutils                  # USB tools to query connected USB devices
 
     # BACKUP --------------------------------------------------------------
 
@@ -149,7 +181,10 @@ PACKAGES=(
     # MEDIA ---------------------------------------------------------------
 
     celluloid                 # Simple GTK+ frontend for mpv
+    eog 	                    # Eye of Gnome: An image viewer
     mpv                       # A free, open source, and cross-platform media player
+    nicotine+                 # Music-sharing client
+    shortwave                 # Find and listen to internet radio stations
     spotify                   # A proprietary music streaming service
     spotify-tui               # Spotify client for the terminal
     spicetify-cli             # Command-line tool to customize Spotify client
@@ -159,12 +194,15 @@ PACKAGES=(
 
     # INTERNET AND CLOUD --------------------------------------------------
 
-    brave-bin                 # Web browser that blocks ads and trackers by default
     firefox                   # Standalone web browser
     insync                    # A Google Drive and OneDrive client
     owncloud-client           # ownCloud client
+    syncthing-bin             # Open Source Continuous Replication / Cluster Synchronization Thing
+    syncthing-gtk             # GTK based GUI and notification area icon for Synchronization Thing
     thunderbird               # Standalone mail reader
     transmission-gtk          # Fast, easy and free torrent client
+    signal-desktop-beta-bin   # Signal private messaging
+    wike                      # Wikipedia reader
 
     # VECTOR GRAPHICS EDITORS ---------------------------------------------
 
