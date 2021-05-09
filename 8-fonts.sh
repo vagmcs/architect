@@ -33,6 +33,7 @@ PACKAGES=(
     nerd-fonts-source-code-pro   # Patched font SourceCodePro from nerd-fonts library
     nerd-fonts-ubuntu-mono       # Patched font UbuntuMono from the nerd-fonts library
     noto-fonts-emoji             # Google 'NO more TOfu' emoji fonts
+    noto-color-emoji-fontconfig  # Fontconfig to enable 'NO more TOfu' Color Emoji fonts
     terminus-font                # Monospace bitmap font for the console
     ttf-fira-code                # Monospaced font that includes programming ligatures
     ttf-hack                     # A hand groomed and optically balanced typeface
